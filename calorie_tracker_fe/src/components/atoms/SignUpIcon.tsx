@@ -1,6 +1,5 @@
 import Icon from "@ant-design/icons";
 import React from "react";
-
 interface PropsType {
   width: string,
   height: string,

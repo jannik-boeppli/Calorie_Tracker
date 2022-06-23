@@ -10,6 +10,8 @@ import SignUpIcon from "../../atoms/SignUpIcon";
 import "./LoginPage.css";
 
 export default function LoginPage() {
+  const [isHoveringLink, setIsHoveringLink] = useState(false);
+  console.log(isHoveringLink)
   return (
     <>
       <Row className="login-half">
@@ -21,10 +23,10 @@ export default function LoginPage() {
         <Col span={24} className="center">
           <Card
             className="center login-card"
-            bodyStyle={{ width: "75%", height: "80%" }}
+            bodyStyle={{ width: "75%", height: "100%" }}
           >
             <Space
-              className="fill-content"
+              className="fill-content center"
               direction="vertical"
               size={30}
             >
@@ -39,7 +41,15 @@ export default function LoginPage() {
                 <Button className="login-button" type="primary" size="large">
                   Login
                 </Button>
-                  <Link href="/" style={{ fontSize: "1.5em", color: "#00000073" }}><SignUpIcon fill="#00000073" width="1em" height="1em"/> Sign Up</Link>
+                <Link
+                  onMouseEnter={() => setIsHoveringLink(true)}
+                  onMouseLeave={() => setIsHoveringLink(false)}
+                  href="/"
+                  style={{ fontSize: "1.5em" }}
+                >
+                  <SignUpIcon fill={isHoveringLink ? "#092b00" :"#00000073"} width="1em" height="1em" /> Sign
+                  Up
+                </Link>
               </Space>
             </Space>
           </Card>
