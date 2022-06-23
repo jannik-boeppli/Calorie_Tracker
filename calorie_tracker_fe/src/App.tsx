@@ -1,14 +1,14 @@
 import React from "react";
-import "./App.css";
+import "./App.less";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import AuthPage from "./components/pages/AuthPage";
+import LoginPage from "./components/pages/LoginPage/LoginPage";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<AuthPage />}/>
+          <Route path="/" element={<LoginPage />}/>
         </Routes>
       </BrowserRouter>
     </div>
