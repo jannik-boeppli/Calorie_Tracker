@@ -3,60 +3,119 @@ import {
   LoginOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Col, Input, Row, Space } from "antd";
+import { Button, Card, Col, Input, Row, Space, Typography } from "antd";
 import Link from "antd/lib/typography/Link";
+import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SignUpIcon from "../../atoms/SignUpIcon";
 import "./LoginPage.css";
+import * as Yup from "yup";
 
 export default function LoginPage() {
   const [isHoveringLink, setIsHoveringLink] = useState(false);
   const navigate = useNavigate();
-  console.log(isHoveringLink)
+  const { Text } = Typography;
+  const validationSchema = Yup.object({
+    username: Yup.string()
+      .required("Please enter a username")
+      .max(255, "The username can't be longer than 255 characters"),
+    password: Yup.string()
+      .required("Please enter a password")
+      .max(255, "The password can't be longer than 255 characters"),
+  });
+
   return (
-    <>
-      <Row className="login-half">
-        <Col span={24} className="center">
-          <LoginOutlined className="main-icon" />
-        </Col>
-      </Row>
-      <Row className="login-half">
-        <Col span={24} className="center">
-          <Card
-            className="center login-card"
-            bodyStyle={{ width: "75%", height: "100%" }}
-          >
-            <Space
-              className="fill-content center"
-              direction="vertical"
-              size={30}
-            >
-              <Input
-                size="large"
-                placeholder="Username"
-                autoFocus
-                suffix={<UserOutlined />}
-              />
-              <Input.Password size="large" placeholder="Password" />
-              <Space className="fill-content" direction="vertical" size="small">
-                <Button className="login-button" type="primary" size="large">
-                  Login
-                </Button>
-                <Link
-                  onMouseEnter={() => setIsHoveringLink(true)}
-                  onMouseLeave={() => setIsHoveringLink(false)}
-                  onClick={() => navigate("/signup")}
-                  style={{ fontSize: "1.5em" }}
+    <Formik
+      initialValues={{ username: "", password: "" }}
+      validationSchema={validationSchema}
+      onSubmit={(values, helpers) => {
+        console.log(values);
+        helpers.setSubmitting(false);
+        //TODO: Submit data to backend
+      }}
+    >
+      {({ isSubmitting, submitForm, handleChange, values, errors }) => (
+        <Form>
+          <Row className="login-half">
+            <Col span={24} className="center">
+              <LoginOutlined className="main-icon"/>
+            </Col>
+          </Row>
+          <Row className="login-half">
+            <Col span={24} className="center">
+              <Card
+                className="center login-card"
+                bodyStyle={{ width: "75%", height: "100%" }}
+              >
+                <Space
+                  className="fill-content center"
+                  direction="vertical"
+                  size={30}
                 >
-                  <SignUpIcon fill={isHoveringLink ? "#092b00" :"#00000073"} width="1em" height="1em" /> Sign
-                  Up
-                </Link>
-              </Space>
-            </Space>
-          </Card>
-        </Col>
-      </Row>
-    </>
+                  <div>
+                    <Input
+                      status={errors.username && "error"}
+                      value={values.username}
+                      onChange={handleChange}
+                      name="username"
+                      size="large"
+                      placeholder="Username"
+                      autoFocus
+                      suffix={<UserOutlined />}
+                    />
+                    {errors.username && (
+                      <Text type="danger">{errors.username}</Text>
+                    )}
+                  </div>
+                  <div>
+                    <Input.Password
+                      status={errors.password && "error"}
+                      value={values.password}
+                      onChange={handleChange}
+                      name="password"
+                      size="large"
+                      placeholder="Password"
+                    />
+                    {errors.password && (
+                      <Text type="danger">{errors.password}</Text>
+                    )}
+                  </div>
+                  <Space
+                    className="fill-content"
+                    direction="vertical"
+                    size="small"
+                  >
+                    <Button
+                      className="login-button"
+                      onClick={() => submitForm()}
+                      loading={isSubmitting}
+                      disabled={isSubmitting}
+                      type="primary"
+                      size="large"
+                    >
+                      Login
+                    </Button>
+                    <Link
+                      onMouseEnter={() => setIsHoveringLink(true)}
+                      onMouseLeave={() => setIsHoveringLink(false)}
+                      onClick={() => navigate("/signup")}
+                      style={{ fontSize: "1.5em" }}
+                    >
+                      <SignUpIcon
+                        fill={isHoveringLink ? "#092b00" : "#00000073"}
+                        width="1em"
+                        height="1em"
+                      />{" "}
+                      Sign Up
+                    </Link>
+                  </Space>
+                </Space>
+              </Card>
+            </Col>
+          </Row>
+        </Form>
+      )}
+    </Formik>
   );
 }
