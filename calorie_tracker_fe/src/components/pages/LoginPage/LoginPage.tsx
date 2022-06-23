@@ -1,8 +1,4 @@
-import {
-  EyeInvisibleOutlined,
-  LoginOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { LoginOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Card, Col, Input, Row, Space, Typography } from "antd";
 import Link from "antd/lib/typography/Link";
 import { Form, Formik } from "formik";
@@ -14,6 +10,7 @@ import * as Yup from "yup";
 
 export default function LoginPage() {
   const [isHoveringLink, setIsHoveringLink] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
   const navigate = useNavigate();
   const { Text } = Typography;
   const validationSchema = Yup.object({
@@ -25,13 +22,17 @@ export default function LoginPage() {
       .max(255, "The password can't be longer than 255 characters"),
   });
 
+  console.log(hasSubmitted);
+
   return (
     <Formik
+      validateOnChange={hasSubmitted}
       initialValues={{ username: "", password: "" }}
       validationSchema={validationSchema}
       onSubmit={(values, helpers) => {
         console.log(values);
         helpers.setSubmitting(false);
+        setHasSubmitted(true)
         //TODO: Submit data to backend
       }}
     >
@@ -39,7 +40,7 @@ export default function LoginPage() {
         <Form>
           <Row className="login-half">
             <Col span={24} className="center">
-              <LoginOutlined className="main-icon"/>
+              <LoginOutlined className="main-icon" />
             </Col>
           </Row>
           <Row className="login-half">
