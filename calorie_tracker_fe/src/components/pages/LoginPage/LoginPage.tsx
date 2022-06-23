@@ -6,11 +6,13 @@ import {
 import { Button, Card, Col, Input, Row, Space } from "antd";
 import Link from "antd/lib/typography/Link";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SignUpIcon from "../../atoms/SignUpIcon";
 import "./LoginPage.css";
 
 export default function LoginPage() {
   const [isHoveringLink, setIsHoveringLink] = useState(false);
+  const navigate = useNavigate();
   console.log(isHoveringLink)
   return (
     <>
@@ -44,7 +46,7 @@ export default function LoginPage() {
                 <Link
                   onMouseEnter={() => setIsHoveringLink(true)}
                   onMouseLeave={() => setIsHoveringLink(false)}
-                  href="/"
+                  onClick={() => navigate("/signup")}
                   style={{ fontSize: "1.5em" }}
                 >
                   <SignUpIcon fill={isHoveringLink ? "#092b00" :"#00000073"} width="1em" height="1em" /> Sign
