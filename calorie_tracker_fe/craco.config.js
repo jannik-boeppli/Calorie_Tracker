@@ -21,7 +21,7 @@ module.exports = {
               "@menu-item-active-bg": "@green-10",
               "@layout-trigger-background": "#bfbfbf",
               "@layout-trigger-color": "#00000073",
-              "@menu-item-color": "#00000073",
+              "@menu-item-color": "#000000D9",
             },
             javascriptEnabled: true,
           },
