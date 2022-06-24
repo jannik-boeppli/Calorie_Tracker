@@ -4,7 +4,7 @@ import Link from "antd/lib/typography/Link";
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import SignUpIcon from "../../atoms/SignUpIcon";
+import SignUpIcon from "../../atoms/SignUpIcon/SignUpIcon";
 import "./LoginPage.css";
 import * as Yup from "yup";
 
