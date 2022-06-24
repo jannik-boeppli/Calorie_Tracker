@@ -4,18 +4,23 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginPage from "./components/pages/LoginPage/LoginPage";
 import SignUpPage from "./components/pages/SignUpPage/SignUpPage";
 import LandingPage from "./components/pages/LandingPage/LandingPage";
+import Sidebar from "./components/organisms/Sidebar/Sidebar";
+import { Layout } from "antd";
 
 function App() {
   return (
-    <div className="App">
+    <Layout className="App">
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingPage/>}/>
-          <Route path="/login" element={<LoginPage />}/>
-          <Route path="/signup" element={<SignUpPage />}/>
-        </Routes>
+        <Sidebar />
+        <Layout style={{ marginLeft: 80 }}>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+          </Routes>
+        </Layout>
       </BrowserRouter>
-    </div>
+    </Layout>
   );
 }
 

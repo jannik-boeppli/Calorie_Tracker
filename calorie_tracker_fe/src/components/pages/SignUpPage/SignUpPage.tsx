@@ -1,17 +1,13 @@
-import { LoginOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Input, Row, Space, Typography } from "antd";
-import Link from "antd/lib/typography/Link";
+import { UserOutlined } from "@ant-design/icons";
+import { Row, Col, Card, Space, Input, Button, Typography } from "antd";
 import { Form, Formik } from "formik";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import SignUpIcon from "../../atoms/SignUpIcon/SignUpIcon";
-import "./LoginPage.css";
+import "../LoginPage/LoginPage.css";
 import * as Yup from "yup";
+import { useState } from "react";
 
-export default function LoginPage() {
-  const [isHoveringLink, setIsHoveringLink] = useState(false);
+export default function SignUpPage() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const navigate = useNavigate();
   const { Text } = Typography;
   const validationSchema = Yup.object({
     username: Yup.string()
@@ -20,19 +16,22 @@ export default function LoginPage() {
     password: Yup.string()
       .required("Please enter a password")
       .max(255, "The password can't be longer than 255 characters"),
+    repeatedPassword: Yup.string()
+      .required("Please repeat the password")
+      .test("passwords-match", "Passwords must match", function (value) {
+        return this.parent.password === value;
+      }),
   });
-
-  console.log(hasSubmitted);
 
   return (
     <Formik
-      validateOnChange={hasSubmitted}
-      initialValues={{ username: "", password: "" }}
+    validateOnChange={hasSubmitted}
+      initialValues={{ username: "", password: "", repeatedPassword: "" }}
       validationSchema={validationSchema}
       onSubmit={(values, helpers) => {
         console.log(values);
         helpers.setSubmitting(false);
-        setHasSubmitted(true)
+        setHasSubmitted(false)
         //TODO: Submit data to backend
       }}
     >
@@ -40,7 +39,7 @@ export default function LoginPage() {
         <Form>
           <Row className="login-half">
             <Col span={24} className="center">
-              <LoginOutlined className="main-icon" />
+              <SignUpIcon width="40vmin" height="40vmin" fill="#389e0d" />
             </Col>
           </Row>
           <Row className="login-half">
@@ -82,35 +81,29 @@ export default function LoginPage() {
                       <Text type="danger">{errors.password}</Text>
                     )}
                   </div>
-                  <Space
-                    className="fill-content"
-                    direction="vertical"
-                    size="small"
-                  >
-                    <Button
-                      className="login-button"
-                      onClick={() => submitForm()}
-                      loading={isSubmitting}
-                      disabled={isSubmitting}
-                      type="primary"
+                  <div>
+                    <Input.Password
+                      status={errors.repeatedPassword && "error"}
+                      value={values.repeatedPassword}
+                      onChange={handleChange}
+                      name="repeatedPassword"
                       size="large"
-                    >
-                      Login
-                    </Button>
-                    <Link
-                      onMouseEnter={() => setIsHoveringLink(true)}
-                      onMouseLeave={() => setIsHoveringLink(false)}
-                      onClick={() => navigate("/signup")}
-                      style={{ fontSize: "1.5em" }}
-                    >
-                      <SignUpIcon
-                        fill={isHoveringLink ? "#092b00" : "#00000073"}
-                        width="1em"
-                        height="1em"
-                      />{" "}
-                      Sign Up
-                    </Link>
-                  </Space>
+                      placeholder="Repeat Password"
+                    />
+                    {errors.repeatedPassword && (
+                      <Text type="danger">{errors.repeatedPassword}</Text>
+                    )}
+                  </div>
+                  <Button
+                    className="login-button"
+                    onClick={() => submitForm()}
+                    loading={isSubmitting}
+                    disabled={isSubmitting}
+                    type="primary"
+                    size="large"
+                  >
+                    Sign Up
+                  </Button>
                 </Space>
               </Card>
             </Col>

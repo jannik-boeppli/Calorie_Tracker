@@ -1,12 +1,8 @@
 import Icon from "@ant-design/icons";
 import React from "react";
-interface PropsType {
-  width: string,
-  height: string,
-  fill?: string,
-}
+import IconProps from "../../../models/IconProps";
 
-export default function SignUpIcon({width, height, fill}: PropsType) {
+export default function SignUpIcon({width, height, fill}: IconProps) {
   return (
     <Icon
       component={() => (

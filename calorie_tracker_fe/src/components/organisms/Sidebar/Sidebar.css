@@ -1,0 +1,9 @@
+.ant-menu-vertical {
+    border: none;
+}
+
+.logout-menu-option {
+    position: absolute;
+    bottom: 48px;
+    width: 100%;
+}
