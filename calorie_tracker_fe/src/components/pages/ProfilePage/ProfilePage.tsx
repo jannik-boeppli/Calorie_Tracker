@@ -1,7 +1,7 @@
 import { UserOutlined } from "@ant-design/icons";
 import { Typography, Form, Row, Col, Card, Space, Input, Button } from "antd";
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React from "react";
 
 import * as Yup from "yup";
 import LineDivider from "../../atoms/LineDivider/LineDivider";
@@ -10,10 +10,8 @@ import "./ProfilePage.css";
 import "../LoginPage/LoginPage.css";
 
 export default function ProfilePage() {
-  const [hasSubmitted, setHasSubmitted] = useState(false);
   const { Text, Title } = Typography;
   const { width } = useWindowDimensions();
-  console.log(hasSubmitted)
 
   const validationSchema = Yup.object({
     username: Yup.string()
@@ -36,7 +34,6 @@ export default function ProfilePage() {
 
   return (
     <Formik
-      validateOnChange={hasSubmitted}
       initialValues={{ username: "John", password: "Doe", weight: "67", height: "176" }}
       validationSchema={validationSchema}
       onSubmit={(values, helpers) => {
@@ -125,11 +122,11 @@ export default function ProfilePage() {
                     style={{ color: "#ffffff" }}
                     level={width < 1050 ? 3 : 2}
                   >
-                    19.2 BMI
+                    {Math.round(+values.weight / +values.height / +values.height * 100000) / 10 || "-"} BMI
                   </Title>
                   <Button
                     className="login-button"
-                    onClick={() => {setHasSubmitted(true); submitForm();}}
+                    onClick={() => submitForm()}
                     loading={isSubmitting}
                     disabled={isSubmitting}
                     type="primary"
