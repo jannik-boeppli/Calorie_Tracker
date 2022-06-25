@@ -1,7 +1,7 @@
-import { FireFilled } from "@ant-design/icons";
 import { Card, Space, Typography } from "antd";
 import React from "react";
 import useWindowDimensions from "../../../utils/WindowDimensions";
+import CalorieIcon from "../../atoms/CalorieIcon/CalorieIcon";
 import CarbIcon from "../../atoms/CarbIcon/CarbIcon";
 import CircularProgress from "../../atoms/CircularProgress/CircularProgress";
 import FatIcon from "../../atoms/FatIcon/FatIcon";
@@ -28,7 +28,7 @@ export default function NutritionDashboard() {
               <div className="icon-label-container">
                 <div>
                   <div>
-                    <FireFilled style={{ color: "#bae637", fontSize: "3em" }} />
+                    <CalorieIcon size="3em"/>
                   </div>
                   <div>
                     <Title className="progress-label-text" level={2}>

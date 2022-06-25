@@ -1,0 +1,8 @@
+.line-divider-container {
+    margin: auto
+}
+
+.line-divider {
+    color: #1F1F1F; 
+    border-top: 2px solid
+}
