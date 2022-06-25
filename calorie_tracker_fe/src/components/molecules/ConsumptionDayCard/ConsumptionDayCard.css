@@ -1,0 +1,28 @@
+.consumption-day-card {
+    background-color: #595959;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+    margin-bottom: 2em;
+}
+
+.consumption-day-card-item {
+    text-align: start;
+}
+
+.consumption-day-card-date-icon {
+    position: absolute;
+    right: 15px;
+    font-size: 4em;
+    color: white;
+}
+
+.consumption-day-card-item h2 {
+    margin-bottom: 0;
+}
+
+h2.consumption-day-card-text, h5.consumption-day-card-text {
+    color: white;
+}
+
+h4.consumption-day-card-text {
+    color: #BFBFBF;
+}
