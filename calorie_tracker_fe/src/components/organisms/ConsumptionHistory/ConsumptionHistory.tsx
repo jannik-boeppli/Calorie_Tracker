@@ -1,9 +1,7 @@
 import { Card, Typography } from "antd";
 import React, { useState } from "react";
 import ConsumptionDay from "../../../models/ConsumptionDay";
-import AddButton from "../../atoms/AddButton/AddButton";
 import LineDivider from "../../atoms/LineDivider/LineDivider";
-import ConsumedFoodCard from "../../molecules/ConsumedFoodCard/ConsumedFoodCard";
 import ConsumptionDayCard from "../../molecules/ConsumptionDayCard/ConsumptionDayCard";
 import "./ConsumptionHistory.css";
 
