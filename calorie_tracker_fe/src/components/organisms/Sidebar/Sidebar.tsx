@@ -1,7 +1,6 @@
 import {
   FlagFilled,
   HomeFilled,
-  LogoutOutlined,
   PlusSquareFilled,
   PoweroffOutlined,
   ProfileFilled,
