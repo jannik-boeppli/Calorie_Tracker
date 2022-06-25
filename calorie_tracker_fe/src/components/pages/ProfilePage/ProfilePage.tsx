@@ -1,14 +1,20 @@
 import { UserOutlined } from "@ant-design/icons";
-import { Row, Col, Card, Space, Input, Button, Typography } from "antd";
-import { Form, Formik } from "formik";
-import SignUpIcon from "../../atoms/SignUpIcon/SignUpIcon";
-import "../LoginPage/LoginPage.css";
-import * as Yup from "yup";
-import { useState } from "react";
+import { Typography, Form, Row, Col, Card, Space, Input, Button } from "antd";
+import { Formik } from "formik";
+import React, { useState } from "react";
 
-export default function SignUpPage() {
+import * as Yup from "yup";
+import LineDivider from "../../atoms/LineDivider/LineDivider";
+import useWindowDimensions from "../../../utils/WindowDimensions";
+import "./ProfilePage.css";
+import "../LoginPage/LoginPage.css";
+
+export default function ProfilePage() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const { Text } = Typography;
+  const { Text, Title } = Typography;
+  const { width } = useWindowDimensions();
+  console.log(hasSubmitted)
+
   const validationSchema = Yup.object({
     username: Yup.string()
       .required("Please enter a username")
@@ -16,41 +22,47 @@ export default function SignUpPage() {
     password: Yup.string()
       .required("Please enter a password")
       .max(255, "The password can't be longer than 255 characters"),
-    repeatedPassword: Yup.string()
-      .required("Please repeat the password")
-      .test("passwords-match", "Passwords must match", function (value) {
-        return this.parent.password === value;
-      }),
+    weight: Yup.number()
+      .required("Please enter a weight")
+      .typeError("weight must consist of numbers only")
+      .positive("weight must be greater than zero")
+      .integer("weight should be rounded to the nearest kg"),
+    height: Yup.number()
+      .required("Please enter a height")
+      .typeError("height must consist of numbers only")
+      .positive("height must be greater than zero")
+      .integer("height should be rounded to the nearest cm"),
   });
 
   return (
     <Formik
-    validateOnChange={hasSubmitted}
-      initialValues={{ username: "", password: "", repeatedPassword: "" }}
+      validateOnChange={hasSubmitted}
+      initialValues={{ username: "John", password: "Doe", weight: "67", height: "176" }}
       validationSchema={validationSchema}
       onSubmit={(values, helpers) => {
-        console.log(values);
+        console.log("test",values);
         helpers.setSubmitting(false);
         //TODO: Submit data to backend
       }}
     >
       {({ isSubmitting, submitForm, handleChange, values, errors }) => (
         <Form>
-          <Row className="login-half">
+          <Row className={width < 1050 ? "adjusted-half" : "login-half"}>
             <Col span={24} className="center">
-              <SignUpIcon width="40vmin" height="40vmin" fill="#389e0d" />
+              <UserOutlined style={{ fontSize: "40vmin", color: "#389e0d" }} />
             </Col>
           </Row>
           <Row className="login-half">
             <Col span={24} className="center">
               <Card
-                className="center login-card"
+                className={"center " + (width < 850 ? "" : "login-card")}
+                style={{ marginBottom: "1em" }}
                 bodyStyle={{ width: "75%", height: "100%" }}
               >
                 <Space
                   className="fill-content center"
                   direction="vertical"
-                  size={30}
+                  size={width < 1050 ? 10 : 30}
                 >
                   <div>
                     <Input
@@ -80,28 +92,50 @@ export default function SignUpPage() {
                       <Text type="danger">{errors.password}</Text>
                     )}
                   </div>
+                  <LineDivider />
                   <div>
-                    <Input.Password
-                      status={errors.repeatedPassword && "error"}
-                      value={values.repeatedPassword}
+                    <Input
+                      status={errors.weight && "error"}
+                      value={values.weight}
                       onChange={handleChange}
-                      name="repeatedPassword"
+                      name="weight"
                       size="large"
-                      placeholder="Repeat Password"
+                      placeholder="Weight"
+                      suffix={"kg"}
                     />
-                    {errors.repeatedPassword && (
-                      <Text type="danger">{errors.repeatedPassword}</Text>
+                    {errors.weight && (
+                      <Text type="danger">{errors.weight}</Text>
                     )}
                   </div>
+                  <div>
+                    <Input
+                      status={errors.height && "error"}
+                      value={values.height}
+                      onChange={handleChange}
+                      name="height"
+                      size="large"
+                      placeholder="Height"
+                      suffix={"cm"}
+                    />
+                    {errors.height && (
+                      <Text type="danger">{errors.height}</Text>
+                    )}
+                  </div>
+                  <Title
+                    style={{ color: "#ffffff" }}
+                    level={width < 1050 ? 3 : 2}
+                  >
+                    19.2 BMI
+                  </Title>
                   <Button
                     className="login-button"
-                    onClick={() => {setHasSubmitted(true);submitForm()}}
+                    onClick={() => {setHasSubmitted(true); submitForm();}}
                     loading={isSubmitting}
                     disabled={isSubmitting}
                     type="primary"
                     size="large"
                   >
-                    Sign Up
+                    Save
                   </Button>
                 </Space>
               </Card>

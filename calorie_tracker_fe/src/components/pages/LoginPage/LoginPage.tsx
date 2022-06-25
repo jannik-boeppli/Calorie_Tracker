@@ -32,7 +32,7 @@ export default function LoginPage() {
       onSubmit={(values, helpers) => {
         console.log(values);
         helpers.setSubmitting(false);
-        setHasSubmitted(true)
+        
         //TODO: Submit data to backend
       }}
     >
@@ -89,7 +89,7 @@ export default function LoginPage() {
                   >
                     <Button
                       className="login-button"
-                      onClick={() => submitForm()}
+                      onClick={() => {setHasSubmitted(true);submitForm()}}
                       loading={isSubmitting}
                       disabled={isSubmitting}
                       type="primary"
