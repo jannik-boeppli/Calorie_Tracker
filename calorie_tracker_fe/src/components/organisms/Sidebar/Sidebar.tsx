@@ -13,7 +13,6 @@ import "./Sidebar.css";
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(true);
   const { Sider } = Layout;
-
   interface SidebarItem {
     label: React.ReactNode;
     key: React.Key;
@@ -45,28 +44,29 @@ export default function Sidebar() {
   ];
 
   return (
-    <Sider
-    style={{
-      zIndex: 1,
-      overflow: 'auto',
-      height: '100vh',
-      position: 'fixed',
-      left: 0,
-      top: 0,
-      bottom: 0,
-    }}
-      collapsible
-      collapsed={collapsed}
-      onCollapse={(value) => setCollapsed(value)}
-    >
-      <div className="logo" />
-      <Menu
-        onClick={(item) => navigate(item.key)}
-        theme="light"
-        selectedKeys={[pathname]}
-        mode="vertical"
-        items={menuItems}
-      />
-    </Sider>
+    pathname === "/login" || pathname === "/signup" ? (<></>) : (<Sider
+      style={{
+        zIndex: 1,
+        overflow: 'auto',
+        height: '100vh',
+        position: 'fixed',
+        left: 0,
+        top: 0,
+        bottom: 0,
+      }}
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+      >
+        <div className="logo" />
+        <Menu
+          onClick={(item) => navigate(item.key)}
+          theme="light"
+          selectedKeys={[pathname]}
+          mode="vertical"
+          items={menuItems}
+        />
+      </Sider>)
+    
   );
 }

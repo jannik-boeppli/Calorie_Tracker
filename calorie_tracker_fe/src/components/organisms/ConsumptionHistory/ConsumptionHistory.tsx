@@ -1,50 +1,44 @@
 import { Card, Typography } from "antd";
 import React, { useState } from "react";
-import Food from "../../../models/Food";
-import AddButton from "../../atoms/AddButton/AddButton";
+import ConsumptionDay from "../../../models/ConsumptionDay";
 import LineDivider from "../../atoms/LineDivider/LineDivider";
-import ConsumedFoodCard from "../../molecules/ConsumedFoodCard/ConsumedFoodCard";
-import "./ConsumedFoodDashboard.css";
+import ConsumptionDayCard from "../../molecules/ConsumptionDayCard/ConsumptionDayCard";
+import "./ConsumptionHistory.css";
 
-export default function ConsumedFoodDashboard() {
+export default function ConsumptionHistory() {
   const { Title } = Typography;
 
-  const [foodToDisplay, setFoodToDisplay] = useState<Food[]>([
+  const [daysToDisplay, setDaysToDisplay] = useState<ConsumptionDay[]>([
     {
-      amount: 250,
-      name: "Spaghetti Bolognese",
+      date: new Date("2022-06-13"),
       calories: 1600,
       protein: 40,
       fat: 28,
       carbs: 53,
     },
     {
-      amount: 250,
-      name: "Spaghetti Bolognese",
+      date: new Date("2022-06-13"),
       calories: 1600,
       protein: 40,
       fat: 28,
       carbs: 53,
     },
     {
-      amount: 250,
-      name: "Spaghetti Bolognese",
+      date: new Date("2022-06-13"),
       calories: 1600,
       protein: 40,
       fat: 28,
       carbs: 53,
     },
     {
-      amount: 250,
-      name: "Spaghetti Bolognese",
+      date: new Date("2022-06-13"),
       calories: 1600,
       protein: 40,
       fat: 28,
       carbs: 53,
     },
     {
-      amount: 250,
-      name: "Spaghetti Bolognese",
+      date: new Date("2022-06-13"),
       calories: 1600,
       protein: 40,
       fat: 28,
@@ -60,25 +54,23 @@ export default function ConsumedFoodDashboard() {
       <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
         <div>
           <Title style={{ color: "white" }} level={2}>
-            Food Consumed Today
+            History
           </Title>
           <LineDivider />
         </div>
         <div style={{ flex: "1", overflow: "auto" }}>
-          {foodToDisplay.map((food) => (
-            <ConsumedFoodCard
-            amount={food.amount}
-            name={food.name}
-            calories={food.calories}
-            protein={food.protein}
-            fat={food.fat}
-            carbs={food.carbs}
+          {daysToDisplay.map((day) => (
+            <ConsumptionDayCard
+            date={day.date}
+            calories={day.calories}
+            protein={day.protein}
+            fat={day.fat}
+            carbs={day.carbs}
           />
           ))}
         </div>
         <div>
           <LineDivider />
-          <AddButton />
         </div>
       </div>
     </Card>
