@@ -11,7 +11,7 @@ export default function NutritionGoal(props: PropsType) {
   return (
     <>
       {props.icon}
-      <Input style={{ marginTop: "1em" }} {...props} />
+      <Input style={{ marginTop: "1em" }} size="large" {...props} />
       {props.error && <Text type="danger">{props.error}</Text>}
     </>
   );

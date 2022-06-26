@@ -62,6 +62,7 @@ export default function NutritionGoalsPage() {
                 <NutritionGoal
                   icon={<CalorieIcon size={iconDimensions.width} />}
                   error={errors.calories}
+                  status={errors.calories && "error"}
                   placeholder="Calorie Consumption Goal"
                   onChange={handleChange}
                   value={values.calories}
@@ -75,6 +76,7 @@ export default function NutritionGoalsPage() {
                 <NutritionGoal
                   icon={<ProteinIcon {...iconDimensions} />}
                   error={errors.protein}
+                  status={errors.protein && "error"}
                   placeholder="Protein Consumption Goal"
                   onChange={handleChange}
                   value={values.protein}
@@ -88,6 +90,7 @@ export default function NutritionGoalsPage() {
                 <NutritionGoal
                   icon={<FatIcon {...iconDimensions} />}
                   error={errors.fat}
+                  status={errors.fat && "error"}
                   placeholder="Fat Consumption Goal"
                   onChange={handleChange}
                   value={values.fat}
@@ -101,6 +104,7 @@ export default function NutritionGoalsPage() {
                 <NutritionGoal
                   icon={<CarbIcon {...iconDimensions} />}
                   error={errors.carbs}
+                  status={errors.carbs && "error"}
                   placeholder="Carb Consumption Goal"
                   onChange={handleChange}
                   value={values.carbs}
@@ -114,6 +118,7 @@ export default function NutritionGoalsPage() {
                 <NutritionGoal
                   icon={<WeightIcon {...iconDimensions} />}
                   error={errors.bodyWeight}
+                  status={errors.bodyWeight && "error"}
                   placeholder="Bodyweight Goal"
                   onChange={handleChange}
                   value={values.bodyWeight}
