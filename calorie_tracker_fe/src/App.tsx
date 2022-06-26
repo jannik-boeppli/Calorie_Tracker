@@ -8,6 +8,7 @@ import Sidebar from "./components/organisms/Sidebar/Sidebar";
 import { Layout } from "antd";
 import ProfilePage from "./components/pages/ProfilePage/ProfilePage";
 import MainLayout from "./components/atoms/MainLayout/MainLayout";
+import NutritionGoalsPage from "./components/pages/NutritionGoalsPage/NutritionGoalsPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/goals" element={<NutritionGoalsPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUpPage />} />
           </Routes>
