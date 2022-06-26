@@ -7,6 +7,6 @@ interface PropsType {
 
 export default function CalorieIcon({size}: PropsType) {
   return (
-    <FireFilled style={{ color: "#bae637", fontSize: size }} />
+    <FireFilled style={{ color: "#bae637", fontSize: size, marginBottom: "6px" }} />
   )
 }

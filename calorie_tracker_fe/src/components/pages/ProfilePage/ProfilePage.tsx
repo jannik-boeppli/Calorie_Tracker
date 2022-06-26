@@ -1,5 +1,5 @@
 import { UserOutlined } from "@ant-design/icons";
-import { Typography, Form, Row, Col, Card, Space, Input, Button } from "antd";
+import { Typography, Form, Row, Col, Card, Space, Input } from "antd";
 import { Formik } from "formik";
 import React from "react";
 
@@ -8,6 +8,7 @@ import LineDivider from "../../atoms/LineDivider/LineDivider";
 import useWindowDimensions from "../../../utils/WindowDimensions";
 import "./ProfilePage.css";
 import "../LoginPage/LoginPage.css";
+import SaveButton from "../../atoms/SaveButton/SaveButton";
 
 export default function ProfilePage() {
   const { Text, Title } = Typography;
@@ -34,10 +35,15 @@ export default function ProfilePage() {
 
   return (
     <Formik
-      initialValues={{ username: "John", password: "Doe", weight: "67", height: "176" }}
+      initialValues={{
+        username: "John",
+        password: "Doe",
+        weight: "67",
+        height: "176",
+      }}
       validationSchema={validationSchema}
       onSubmit={(values, helpers) => {
-        console.log("test",values);
+        console.log("test", values);
         helpers.setSubmitting(false);
         //TODO: Submit data to backend
       }}
@@ -122,18 +128,17 @@ export default function ProfilePage() {
                     style={{ color: "#ffffff" }}
                     level={width < 1050 ? 3 : 2}
                   >
-                    {Math.round(+values.weight / +values.height / +values.height * 100000) / 10 || "-"} BMI
+                    {Math.round(
+                      (+values.weight / +values.height / +values.height) *
+                        100000
+                    ) / 10 || "-"}{" "}
+                    BMI
                   </Title>
-                  <Button
-                    className="login-button"
+                  <SaveButton
                     onClick={() => submitForm()}
                     loading={isSubmitting}
                     disabled={isSubmitting}
-                    type="primary"
-                    size="large"
-                  >
-                    Save
-                  </Button>
+                  />
                 </Space>
               </Card>
             </Col>
