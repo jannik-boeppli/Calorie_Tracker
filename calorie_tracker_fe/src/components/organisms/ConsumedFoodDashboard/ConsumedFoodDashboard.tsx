@@ -1,6 +1,7 @@
 import { Card, Typography } from "antd";
 import React, { useState } from "react";
 import Food from "../../../models/Food";
+import useWindowDimensions from "../../../utils/WindowDimensions";
 import AddButton from "../../atoms/AddButton/AddButton";
 import LineDivider from "../../atoms/LineDivider/LineDivider";
 import ConsumedFoodCard from "../../molecules/ConsumedFoodCard/ConsumedFoodCard";
@@ -8,6 +9,7 @@ import "./ConsumedFoodDashboard.css";
 
 export default function ConsumedFoodDashboard() {
   const { Title } = Typography;
+  const isMobile = useWindowDimensions().width < 1050
 
   const [foodToDisplay, setFoodToDisplay] = useState<Food[]>([
     {
@@ -54,6 +56,7 @@ export default function ConsumedFoodDashboard() {
 
   return (
     <Card
+    style={isMobile ? {} : {marginTop: "4em"}}
       bodyStyle={{ height: "100%" }}
       className="consumed-food-dashboard-card"
     >

@@ -9,6 +9,7 @@ import { Layout } from "antd";
 import ProfilePage from "./components/pages/ProfilePage/ProfilePage";
 import MainLayout from "./components/atoms/MainLayout/MainLayout";
 import NutritionGoalsPage from "./components/pages/NutritionGoalsPage/NutritionGoalsPage";
+import AddFoodPage from "./components/pages/AddFoodPage/AddFoodPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/goals" element={<NutritionGoalsPage />} />
+            <Route path="/food" element={<AddFoodPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUpPage />} />
           </Routes>

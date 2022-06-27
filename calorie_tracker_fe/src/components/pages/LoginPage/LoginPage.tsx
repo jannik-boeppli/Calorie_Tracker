@@ -1,5 +1,5 @@
 import { LoginOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Input, Row, Space, Typography } from "antd";
+import { Button, Card, Col, Row, Input as AntInput, Space, Typography } from "antd";
 import Link from "antd/lib/typography/Link";
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import SignUpIcon from "../../atoms/SignUpIcon/SignUpIcon";
 import "./LoginPage.css";
 import * as Yup from "yup";
+import Input from "../../atoms/Input/Input";
 
 export default function LoginPage() {
   const [isHoveringLink, setIsHoveringLink] = useState(false);
@@ -56,7 +57,7 @@ export default function LoginPage() {
                 >
                   <div>
                     <Input
-                      status={errors.username && "error"}
+                      error={errors.username}
                       value={values.username}
                       onChange={handleChange}
                       name="username"
@@ -65,12 +66,9 @@ export default function LoginPage() {
                       autoFocus
                       suffix={<UserOutlined />}
                     />
-                    {errors.username && (
-                      <Text type="danger">{errors.username}</Text>
-                    )}
                   </div>
                   <div>
-                    <Input.Password
+                    <AntInput.Password
                       status={errors.password && "error"}
                       value={values.password}
                       onChange={handleChange}
