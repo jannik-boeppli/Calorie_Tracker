@@ -1,5 +1,6 @@
 import { Card, Typography } from "antd";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Food from "../../../models/Food";
 import useWindowDimensions from "../../../utils/WindowDimensions";
 import AddButton from "../../atoms/AddButton/AddButton";
@@ -10,7 +11,7 @@ import "./ConsumedFoodDashboard.css";
 export default function ConsumedFoodDashboard() {
   const { Title } = Typography;
   const isMobile = useWindowDimensions().width < 1050
-
+  const navigation = useNavigate()
   const [foodToDisplay, setFoodToDisplay] = useState<Food[]>([
     {
       amount: 250,
@@ -81,7 +82,7 @@ export default function ConsumedFoodDashboard() {
         </div>
         <div>
           <LineDivider />
-          <AddButton />
+          <AddButton onClick={() => navigation("/food")} />
         </div>
       </div>
     </Card>
