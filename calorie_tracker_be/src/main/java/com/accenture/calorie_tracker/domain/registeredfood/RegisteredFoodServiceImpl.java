@@ -9,6 +9,8 @@ import com.accenture.calorie_tracker.domain.user.UserService;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RegisteredFoodServiceImpl extends AbstractEntityServiceImpl<RegisteredFood> implements RegisteredFoodService {
 
@@ -45,5 +47,10 @@ public class RegisteredFoodServiceImpl extends AbstractEntityServiceImpl<Registe
     @Override
     public RegisteredFood findByValue(RegisteredFood registeredFood) {
         return ((RegisteredFoodRepository) repository).findByFoodAndUser(registeredFood.getFood(), registeredFood.getUser());
+    }
+
+    @Override
+    public List<RegisteredFood> findAllByUser(User user) {
+        return ((RegisteredFoodRepository) repository).findAllByUser(user);
     }
 }
