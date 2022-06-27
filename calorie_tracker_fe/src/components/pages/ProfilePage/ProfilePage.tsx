@@ -65,7 +65,7 @@ export default function ProfilePage() {
                 <Space
                   className="fill-content center"
                   direction="vertical"
-                  size={width < 1050 ? 10 : 30}
+                  size={width < 1050 ? 10 : 20}
                 >
                   <div>
                     <Input

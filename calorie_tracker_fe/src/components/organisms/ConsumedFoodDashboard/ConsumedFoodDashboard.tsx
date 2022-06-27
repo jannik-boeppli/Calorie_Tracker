@@ -10,7 +10,8 @@ import "./ConsumedFoodDashboard.css";
 
 export default function ConsumedFoodDashboard() {
   const { Title } = Typography;
-  const isMobile = useWindowDimensions().width < 1050
+  const {width, height} = useWindowDimensions()
+  const isMobile = width < 1050
   const navigation = useNavigate()
   const [foodToDisplay, setFoodToDisplay] = useState<Food[]>([
     {
@@ -57,7 +58,7 @@ export default function ConsumedFoodDashboard() {
 
   return (
     <Card
-    style={isMobile ? {} : {marginTop: "4em"}}
+    style={isMobile ? {} : height < 1050 ? {marginTop: "2em"} : {marginTop: "4em"}}
       bodyStyle={{ height: "100%" }}
       className="consumed-food-dashboard-card"
     >
