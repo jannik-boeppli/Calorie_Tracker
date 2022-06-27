@@ -1,0 +1,10 @@
+.nutritions-goals-page-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  .nutritions-goals-page-card {
+    margin-right: 5vw;
+    margin-left: 5vw;
+  }

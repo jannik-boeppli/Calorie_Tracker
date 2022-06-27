@@ -1,0 +1,32 @@
+.nutrition-dashboard-card {
+  margin: 1em;
+}
+.icon-label-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+h2.progress-label-text, h3.progress-label-text {
+  color: white;  
+}
+.calorie-progress .ant-progress-inner {
+  width: 10em !important;
+  height: 10em !important;
+}
+circle.ant-progress-circle-trail {
+    stroke: #8c8c8c;
+}
+h3.progress-subtitle {
+    color: #BFBFBF;
+}
+.progress-subtitle-container {
+    text-align: center;
+}
+.progress-dashboard-space div.ant-space-item {
+    height: 100%;
+}
+
+.protein-progress .ant-progress-inner, .fat-progress .ant-progress-inner, .carb-progress .ant-progress-inner {
+    width: 7.5em !important;
+    height: 7.5em !important;
+}

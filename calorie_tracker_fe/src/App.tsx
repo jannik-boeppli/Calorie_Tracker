@@ -1,25 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.less";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import LoginPage from "./components/pages/LoginPage/LoginPage";
+import SignUpPage from "./components/pages/SignUpPage/SignUpPage";
+import LandingPage from "./components/pages/LandingPage/LandingPage";
+import Sidebar from "./components/organisms/Sidebar/Sidebar";
+import { Layout } from "antd";
+import ProfilePage from "./components/pages/ProfilePage/ProfilePage";
+import MainLayout from "./components/atoms/MainLayout/MainLayout";
+import NutritionGoalsPage from "./components/pages/NutritionGoalsPage/NutritionGoalsPage";
+import AddFoodPage from "./components/pages/AddFoodPage/AddFoodPage";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout className="App">
+      <BrowserRouter>
+        <Sidebar />
+        <MainLayout>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/goals" element={<NutritionGoalsPage />} />
+            <Route path="/food" element={<AddFoodPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+          </Routes>
+        </MainLayout>
+      </BrowserRouter>
+    </Layout>
   );
 }
 

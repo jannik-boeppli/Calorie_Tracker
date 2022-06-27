@@ -1,0 +1,21 @@
+.consumed-food-card {
+    background-color: #595959;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+    margin-bottom: 2em;
+}
+
+.consumed-food-card-item {
+    text-align: start;
+}
+
+.consumed-food-card-item h2 {
+    margin-bottom: 0;
+}
+
+h2.consumed-food-card-text, h5.consumed-food-card-text {
+    color: white;
+}
+
+h4.consumed-food-card-text {
+    color: #BFBFBF;
+}
