@@ -1,4 +1,4 @@
-package com.accenture.ch.calorie_tracker.core.bean;
+package com.accenture.calorie_tracker.core.bean;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
