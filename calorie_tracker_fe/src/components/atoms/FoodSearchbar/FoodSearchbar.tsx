@@ -1,6 +1,7 @@
 import { AutoComplete, AutoCompleteProps, Input, Typography } from "antd";
 import React, { useState } from "react";
 import Food from "../../../models/Food";
+import useWindowDimensions from "../../../utils/WindowDimensions";
 import CalorieIcon from "../CalorieIcon/CalorieIcon";
 import CarbIcon from "../CarbIcon/CarbIcon";
 import FatIcon from "../FatIcon/FatIcon";
@@ -13,6 +14,7 @@ interface PropsType extends AutoCompleteProps {
 export default function FoodSearchbar(props: PropsType) {
   const { Title } = Typography;
   const iconDimensions = { height: "1em", width: "1em" };
+  const isMobile = useWindowDimensions().width < 850
   const convertFoodToOptions = (food: Food[]) =>
     food.map((item) => {
       return {
@@ -25,7 +27,7 @@ export default function FoodSearchbar(props: PropsType) {
             }}
           >
             <span>
-              <Title level={5}>{item.name},</Title> {item.amount}g
+              <Title level={5}>{item.name}</Title> {item.amount}g
             </span>
             <span>
               <div
@@ -77,7 +79,7 @@ export default function FoodSearchbar(props: PropsType) {
   return (
     <AutoComplete
 
-      style={{ width: "250px" }}
+      style={isMobile ? { width: "100%" } : { width: "33.3%" }}
       options={options}
       onSearch={handleSearch}
       {...props}

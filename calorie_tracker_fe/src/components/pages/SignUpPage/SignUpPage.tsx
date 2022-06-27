@@ -1,10 +1,11 @@
 import { UserOutlined } from "@ant-design/icons";
-import { Row, Col, Card, Space, Input, Button, Typography } from "antd";
+import { Row, Col, Card, Space, Button, Typography, Input as AntInput, } from "antd";
 import { Form, Formik } from "formik";
 import SignUpIcon from "../../atoms/SignUpIcon/SignUpIcon";
 import "../LoginPage/LoginPage.css";
 import * as Yup from "yup";
 import { useState } from "react";
+import Input from "../../atoms/Input/Input";
 
 export default function SignUpPage() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -54,7 +55,7 @@ export default function SignUpPage() {
                 >
                   <div>
                     <Input
-                      status={errors.username && "error"}
+                      error={errors.username}
                       value={values.username}
                       onChange={handleChange}
                       name="username"
@@ -63,12 +64,9 @@ export default function SignUpPage() {
                       autoFocus
                       suffix={<UserOutlined />}
                     />
-                    {errors.username && (
-                      <Text type="danger">{errors.username}</Text>
-                    )}
                   </div>
                   <div>
-                    <Input.Password
+                    <AntInput.Password
                       status={errors.password && "error"}
                       value={values.password}
                       onChange={handleChange}
@@ -81,7 +79,7 @@ export default function SignUpPage() {
                     )}
                   </div>
                   <div>
-                    <Input.Password
+                    <AntInput.Password
                       status={errors.repeatedPassword && "error"}
                       value={values.repeatedPassword}
                       onChange={handleChange}

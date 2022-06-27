@@ -1,12 +1,15 @@
 import { Card, Typography } from "antd";
 import React, { useState } from "react";
 import ConsumptionDay from "../../../models/ConsumptionDay";
+import useWindowDimensions from "../../../utils/WindowDimensions";
 import LineDivider from "../../atoms/LineDivider/LineDivider";
 import ConsumptionDayCard from "../../molecules/ConsumptionDayCard/ConsumptionDayCard";
 import "./ConsumptionHistory.css";
 
 export default function ConsumptionHistory() {
   const { Title } = Typography;
+  const isMobile = useWindowDimensions().width < 1050
+
 
   const [daysToDisplay, setDaysToDisplay] = useState<ConsumptionDay[]>([
     {
@@ -48,8 +51,9 @@ export default function ConsumptionHistory() {
 
   return (
     <Card
+    style={isMobile ? {} : {marginTop: "4em"}}
       bodyStyle={{ height: "100%" }}
-      className="consumed-food-dashboard-card"
+      className="consumption-history-dashboard-card"
     >
       <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
         <div>
