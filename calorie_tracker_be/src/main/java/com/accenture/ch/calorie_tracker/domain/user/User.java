@@ -12,6 +12,9 @@ public class User extends AbstractEntity {
     @Column(unique = true, name = "username", nullable = false)
     private String username;
 
+    @Column(name = "password")
+    private String password;
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -25,8 +28,9 @@ public class User extends AbstractEntity {
     @JoinColumn(name = "body_mass")
     private BodyMass bodyMass;
 
-    public User(String username, String firstName, String lastName, int heightInCM, BodyMass bodyMass) {
+    public User(String username, String password, String firstName, String lastName, int heightInCM, BodyMass bodyMass) {
         this.username = username;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.heightInCM = heightInCM;
@@ -96,6 +100,15 @@ public class User extends AbstractEntity {
 
     public User setBodyMass(BodyMass bodyMass) {
         this.bodyMass = bodyMass;
+        return this;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public User setPassword(String password) {
+        this.password = password;
         return this;
     }
 }
