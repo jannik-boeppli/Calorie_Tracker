@@ -1,5 +1,13 @@
 import { UserOutlined } from "@ant-design/icons";
-import { Typography, Form, Row, Col, Card, Space, Input } from "antd";
+import {
+  Typography,
+  Form,
+  Row,
+  Col,
+  Card,
+  Space,
+  Input as AntInput,
+} from "antd";
 import { Formik } from "formik";
 import React from "react";
 
@@ -9,12 +17,19 @@ import useWindowDimensions from "../../../utils/WindowDimensions";
 import "./ProfilePage.css";
 import "../LoginPage/LoginPage.css";
 import SaveButton from "../../atoms/SaveButton/SaveButton";
+import Input from "../../atoms/Input/Input";
 
 export default function ProfilePage() {
   const { Text, Title } = Typography;
   const { width } = useWindowDimensions();
 
   const validationSchema = Yup.object({
+    firstName: Yup.string()
+      .required("Please enter a first name")
+      .max(255, "The firstName can't be longer than 255 characters"),
+    lastName: Yup.string()
+      .required("Please enter a last name")
+      .max(255, "The last name can't be longer than 255 characters"),
     username: Yup.string()
       .required("Please enter a username")
       .max(255, "The username can't be longer than 255 characters"),
@@ -36,7 +51,9 @@ export default function ProfilePage() {
   return (
     <Formik
       initialValues={{
-        username: "John",
+        firstName: "John",
+        lastName: "Doe",
+        username: "John_123",
         password: "Doe",
         weight: "67",
         height: "176",
@@ -50,15 +67,15 @@ export default function ProfilePage() {
     >
       {({ isSubmitting, submitForm, handleChange, values, errors }) => (
         <Form>
-          <Row className={width < 1050 ? "adjusted-half" : "login-half"}>
+          <Row className={width < 1050 ? "adjusted-half" : "profile-top-half"}>
             <Col span={24} className="center">
-              <UserOutlined style={{ fontSize: "40vmin", color: "#389e0d" }} />
+              <UserOutlined style={{ fontSize: "30vmin", color: "#389e0d" }} />
             </Col>
           </Row>
-          <Row className="login-half">
+          <Row>
             <Col span={24} className="center">
               <Card
-                className={"center " + (width < 850 ? "" : "login-card")}
+                className={"center " + (width < 850 ? "" : "profile-page-card")}
                 style={{ marginBottom: "1em" }}
                 bodyStyle={{ width: "75%", height: "100%" }}
               >
@@ -69,7 +86,28 @@ export default function ProfilePage() {
                 >
                   <div>
                     <Input
-                      status={errors.username && "error"}
+                      error={errors.firstName}
+                      value={values.firstName}
+                      onChange={handleChange}
+                      name="firstName"
+                      size="large"
+                      placeholder="First Name"
+                      autoFocus
+                    />
+                  </div>
+                  <div>
+                    <Input
+                      error={errors.lastName}
+                      value={values.lastName}
+                      onChange={handleChange}
+                      name="lastName"
+                      size="large"
+                      placeholder="Last Name"
+                    />
+                  </div>
+                  <div>
+                    <Input
+                      error={errors.username}
                       value={values.username}
                       onChange={handleChange}
                       name="username"
@@ -78,27 +116,11 @@ export default function ProfilePage() {
                       autoFocus
                       suffix={<UserOutlined />}
                     />
-                    {errors.username && (
-                      <Text type="danger">{errors.username}</Text>
-                    )}
-                  </div>
-                  <div>
-                    <Input.Password
-                      status={errors.password && "error"}
-                      value={values.password}
-                      onChange={handleChange}
-                      name="password"
-                      size="large"
-                      placeholder="Password"
-                    />
-                    {errors.password && (
-                      <Text type="danger">{errors.password}</Text>
-                    )}
                   </div>
                   <LineDivider />
                   <div>
                     <Input
-                      status={errors.weight && "error"}
+                      error={errors.weight}
                       value={values.weight}
                       onChange={handleChange}
                       name="weight"
@@ -112,7 +134,7 @@ export default function ProfilePage() {
                   </div>
                   <div>
                     <Input
-                      status={errors.height && "error"}
+                      error={errors.height}
                       value={values.height}
                       onChange={handleChange}
                       name="height"

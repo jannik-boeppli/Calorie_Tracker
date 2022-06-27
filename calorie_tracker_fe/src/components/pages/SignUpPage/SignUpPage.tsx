@@ -11,9 +11,15 @@ export default function SignUpPage() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const { Text } = Typography;
   const validationSchema = Yup.object({
+    firstName: Yup.string()
+      .required("Please enter a first name")
+      .max(255, "The first name can't be longer than 255 characters"),
+      lastName: Yup.string()
+      .required("Please enter a last name")
+      .max(255, "The last name can't be longer than 255 characters"),
     username: Yup.string()
       .required("Please enter a username")
-      .max(255, "The username can't be longer than 255 characters"),
+      .max(255, "The username can't be longer than 255 characters"), 
     password: Yup.string()
       .required("Please enter a password")
       .max(255, "The password can't be longer than 255 characters"),
@@ -27,7 +33,7 @@ export default function SignUpPage() {
   return (
     <Formik
     validateOnChange={hasSubmitted}
-      initialValues={{ username: "", password: "", repeatedPassword: "" }}
+      initialValues={{firstName: "", lastName: "", username: "", password: "", repeatedPassword: "" }}
       validationSchema={validationSchema}
       onSubmit={(values, helpers) => {
         console.log(values);
@@ -53,6 +59,27 @@ export default function SignUpPage() {
                   direction="vertical"
                   size={30}
                 >
+                  <div>
+                    <Input
+                    error={errors.firstName}
+                      value={values.firstName}
+                      onChange={handleChange}
+                      name="firstName"
+                      size="large"
+                      placeholder="First Name"
+                      autoFocus
+                    />
+                  </div>
+                  <div>
+                    <Input
+                    error={errors.lastName}
+                      value={values.lastName}
+                      onChange={handleChange}
+                      name="lastName"
+                      size="large"
+                      placeholder="Last Name"
+                    />
+                  </div>
                   <div>
                     <Input
                       error={errors.username}
