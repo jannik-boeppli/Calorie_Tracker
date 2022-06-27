@@ -3,6 +3,7 @@ package com.accenture.calorie_tracker.domain.usergoal.dto;
 import com.accenture.calorie_tracker.core.generic.AbstractEntityDTO;
 import com.accenture.calorie_tracker.domain.goal.Goal;
 import com.accenture.calorie_tracker.domain.user.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
 
@@ -22,11 +23,11 @@ public class UserGoalDTO extends AbstractEntityDTO {
     }
 
     public User getUser() {
-        return user;
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     public UserGoalDTO setUser(User user) {
-        this.user = user;
+        this.user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return this;
     }
 

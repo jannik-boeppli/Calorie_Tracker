@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface NutritionRepository extends AbstractEntityRepository<Nutrition> {
+    Nutrition findByCaloriesAndCarbsAndFatAndProtein(int calories, int carbs, int fat, int protein);
 }

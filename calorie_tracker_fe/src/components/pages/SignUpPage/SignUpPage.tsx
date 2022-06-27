@@ -1,25 +1,37 @@
 import { UserOutlined } from "@ant-design/icons";
-import { Row, Col, Card, Space, Button, Typography, Input as AntInput, } from "antd";
+import {
+  Row,
+  Col,
+  Card,
+  Space,
+  Button,
+  Typography,
+  Input as AntInput,
+  message,
+} from "antd";
 import { Form, Formik } from "formik";
 import SignUpIcon from "../../atoms/SignUpIcon/SignUpIcon";
 import "../LoginPage/LoginPage.css";
 import * as Yup from "yup";
 import { useState } from "react";
 import Input from "../../atoms/Input/Input";
+import AuthenticationService from "../../../services/AuthenticationService";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUpPage() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const { Text } = Typography;
+  const navigation = useNavigate();
   const validationSchema = Yup.object({
     firstName: Yup.string()
       .required("Please enter a first name")
       .max(255, "The first name can't be longer than 255 characters"),
-      lastName: Yup.string()
+    lastName: Yup.string()
       .required("Please enter a last name")
       .max(255, "The last name can't be longer than 255 characters"),
     username: Yup.string()
       .required("Please enter a username")
-      .max(255, "The username can't be longer than 255 characters"), 
+      .max(255, "The username can't be longer than 255 characters"),
     password: Yup.string()
       .required("Please enter a password")
       .max(255, "The password can't be longer than 255 characters"),
@@ -32,11 +44,25 @@ export default function SignUpPage() {
 
   return (
     <Formik
-    validateOnChange={hasSubmitted}
-      initialValues={{firstName: "", lastName: "", username: "", password: "", repeatedPassword: "" }}
+      validateOnChange={hasSubmitted}
+      initialValues={{
+        firstName: "",
+        lastName: "",
+        username: "",
+        password: "",
+        repeatedPassword: "",
+      }}
       validationSchema={validationSchema}
       onSubmit={(values, helpers) => {
-        console.log(values);
+        AuthenticationService()
+          .signup({ ...values })
+          .then(() => {
+            helpers.setSubmitting(false);
+            navigation("/login");
+          })
+          .catch((error) =>
+            message.error("An unexpected error occured: " + error.response.data)
+          );
         helpers.setSubmitting(false);
         //TODO: Submit data to backend
       }}
@@ -61,7 +87,7 @@ export default function SignUpPage() {
                 >
                   <div>
                     <Input
-                    error={errors.firstName}
+                      error={errors.firstName}
                       value={values.firstName}
                       onChange={handleChange}
                       name="firstName"
@@ -72,7 +98,7 @@ export default function SignUpPage() {
                   </div>
                   <div>
                     <Input
-                    error={errors.lastName}
+                      error={errors.lastName}
                       value={values.lastName}
                       onChange={handleChange}
                       name="lastName"
@@ -120,7 +146,10 @@ export default function SignUpPage() {
                   </div>
                   <Button
                     className="login-button"
-                    onClick={() => {setHasSubmitted(true);submitForm()}}
+                    onClick={() => {
+                      setHasSubmitted(true);
+                      submitForm();
+                    }}
                     loading={isSubmitting}
                     disabled={isSubmitting}
                     type="primary"

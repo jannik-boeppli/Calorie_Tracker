@@ -3,6 +3,8 @@ package com.accenture.calorie_tracker.core.security;
 import com.accenture.calorie_tracker.core.error.UsernameAlreadyExistsException;
 import com.accenture.calorie_tracker.domain.user.User;
 import com.accenture.calorie_tracker.domain.user.UserRepository;
+import com.accenture.calorie_tracker.domain.user.UserService;
+import com.accenture.calorie_tracker.domain.user.UserServiceImpl;
 import com.accenture.calorie_tracker.domain.user.dto.UserMapper;
 import com.accenture.calorie_tracker.domain.user.dto.UserSignUpDTO;
 import org.springframework.stereotype.Service;
@@ -12,12 +14,12 @@ import java.util.Map;
 @Service
 public class AuthService {
     private final JWTManager jwtManager;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final UserMapper userMapper;
 
-    public AuthService(JWTManager jwtManager, UserRepository userRepository, UserMapper userMapper) {
+    public AuthService(JWTManager jwtManager, UserService userService, UserMapper userMapper) {
         this.jwtManager = jwtManager;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.userMapper = userMapper;
     }
 
@@ -30,8 +32,8 @@ public class AuthService {
     }
 
     public User signUp(UserSignUpDTO userSignUpDTO) throws UsernameAlreadyExistsException {
-        if (userRepository.findByUsername(userSignUpDTO.getUsername()) != null)
+        if (userService.findByUsername(userSignUpDTO.getUsername()) != null)
             throw new UsernameAlreadyExistsException();
-        return userRepository.save(userRepository.preSave(userMapper.fromSignUpDTO(userSignUpDTO)));
+        return userService.create(userService.preSave(userMapper.fromSignUpDTO(userSignUpDTO)));
     }
 }

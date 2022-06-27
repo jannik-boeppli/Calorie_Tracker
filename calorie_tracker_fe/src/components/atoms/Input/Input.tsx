@@ -9,8 +9,8 @@ export default function Input(props: PropsType) {
   const { Text } = Typography;
   return (
     <>
-      <AntInput status={props.error && "error"} {...props} />{" "}
-      {props.error && <Text type="danger">{props.error}</Text>}{" "}
+      <AntInput status={props.error && "error"} {...props} />
+      {props.error && (<Text type="danger">{props.error}</Text>)}
     </>
   );
 }

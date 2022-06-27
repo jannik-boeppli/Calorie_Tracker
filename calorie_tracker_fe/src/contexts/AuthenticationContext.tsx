@@ -1,5 +1,6 @@
 import { message } from "antd";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../config/constants/Cookies";
 import Principal from "../models/Principal";
 import AuthenticationService from "../services/AuthenticationService";
@@ -16,7 +17,7 @@ export type AuthenticationContextProps = {
   principal: Principal | undefined;
   isProcessingAuthentication: boolean;
   login: (username: string, password: string) => Promise<void>;
-  requestNewToken: () => Promise<void>;
+  requestNewToken: () => Promise<void> | undefined;
   logout: () => void;
 };
 
@@ -32,6 +33,7 @@ export const AuthenticationContextProvider = ({
   const [principal, setPrincipal] = useState<Principal | undefined>(undefined);
   const [isProcessingAuthentication, setIsProcessingAuthentication] =
     useState(true);
+  const navigate = useNavigate()
 
   const extractAndSetPrincipalAndTokens = ({
     access_token,
@@ -66,11 +68,11 @@ export const AuthenticationContextProvider = ({
     setIsProcessingAuthentication(false);
   };
 
-
   const login = (username: string, password: string) => {
     return AuthenticationService()
       .login(username, password)
-      .then((data) => extractAndSetPrincipalAndTokens(data));
+      .then((data) => extractAndSetPrincipalAndTokens(data))
+      .catch((error_message) => message.error(error_message.response.data));
   };
 
   const logout = async () => {
@@ -80,19 +82,20 @@ export const AuthenticationContextProvider = ({
     message.success("Logout was successful");
   };
 
-  const requestNewToken = () =>
-    AuthenticationService()
-      .requestNewToken()
-      .then((data) => extractAndSetPrincipalAndTokens(data));
-
+  const requestNewToken = () => {
+      return AuthenticationService()
+        .requestNewToken()
+        .then((data) => extractAndSetPrincipalAndTokens(data))
+        .catch(() => navigate("/login"));
+  };
   return (
     <AuthenticationContext.Provider
       value={{
-        principal,
-        login,
-        logout,
-        requestNewToken,
-        isProcessingAuthentication,
+        principal: principal,
+        isProcessingAuthentication: isProcessingAuthentication,
+        login: login,
+        logout: logout,
+        requestNewToken: requestNewToken,
       }}
     >
       {children}

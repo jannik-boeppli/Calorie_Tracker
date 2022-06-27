@@ -24,7 +24,7 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @GetMapping("refreshToken")
+    @GetMapping("refresh-token")
     public ResponseEntity<Map<String, String>> refreshToken(HttpServletRequest request) {
         String authHeader = request.getHeader(AUTHORIZATION);
         return ResponseEntity.ok(authService.refreshToken(authHeader));

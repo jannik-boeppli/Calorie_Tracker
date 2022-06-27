@@ -1,12 +1,16 @@
 package com.accenture.calorie_tracker.core.security;
 
 import com.accenture.calorie_tracker.core.error.MissingUserCredentialsException;
+import com.accenture.calorie_tracker.core.error.UserNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -23,14 +27,16 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JWTManager jwtManager;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Initializes the filter
      */
     public AuthenticationFilter(
-            AuthenticationManager authenticationManager, JWTManager jwtManager) {
+            AuthenticationManager authenticationManager, JWTManager jwtManager, PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
         this.jwtManager = jwtManager;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -41,17 +47,25 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
      * @return The UsernamePasswordAuthenticationToken containing the passed credentials.
      * @throws AuthenticationException The exception thrown by the AuthenticationProvider
      */
+    @SneakyThrows
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response)
             throws AuthenticationException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        System.out.println(username);
+        System.out.println(password);
         if (username == null || password == null) {
             throw new MissingUserCredentialsException();
         }
+        System.out.println(passwordEncoder.encode(password));
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
-        return authenticationManager.authenticate(authenticationToken);
+        try {
+            return authenticationManager.authenticate(authenticationToken);
+        } catch (BadCredentialsException e) {
+            throw new UserNotFoundException();
+        }
     }
 
 

@@ -20,7 +20,8 @@ public class JWTManager {
     private long refreshTokenExp;
     private final JWTVerifier verifier;
 
-    public JWTManager() {
+    public JWTManager(@Value("${jwt.secret}")
+                       String secret) {
         Algorithm algorithm = Algorithm.HMAC256(secret.getBytes());
         this.verifier = JWT.require(algorithm).build();
     }

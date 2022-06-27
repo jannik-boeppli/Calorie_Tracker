@@ -1,4 +1,5 @@
 import { REFRESH_TOKEN } from '../config/constants/Cookies';
+import User from '../models/User';
 import CookieUtility from '../utils/CookieUtility';
 import ApiService from './ApiService'
 
@@ -17,8 +18,11 @@ const AuthenticationService = () => ({
           headers: {Authorization: "Bearer " + CookieUtility.get(REFRESH_TOKEN)},
       })
       return data;
-    }
-  
+    },
+  signup:async (user:User) => {
+    const {data} = await ApiService.post(baseURL + "signup", user)
+    return data;
+  }
 })
 
 export default AuthenticationService

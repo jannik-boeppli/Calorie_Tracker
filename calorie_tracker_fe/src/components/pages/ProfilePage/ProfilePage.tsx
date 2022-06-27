@@ -130,9 +130,6 @@ export default function ProfilePage() {
                       placeholder="Weight"
                       suffix={"kg"}
                     />
-                    {errors.weight && (
-                      <Text type="danger">{errors.weight}</Text>
-                    )}
                   </div>
                   <div>
                     <Input
@@ -144,9 +141,6 @@ export default function ProfilePage() {
                       placeholder="Height"
                       suffix={"cm"}
                     />
-                    {errors.height && (
-                      <Text type="danger">{errors.height}</Text>
-                    )}
                   </div>
                   <Title
                     style={{ color: "#ffffff" }}

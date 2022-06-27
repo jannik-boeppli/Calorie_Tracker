@@ -55,7 +55,7 @@ public abstract class AbstractEntityServiceImpl<T extends AbstractEntity> implem
         logger.debug("Attempting to create " + className);
         entity.setId(null);
 
-        entity = repository.save(entity);
+        entity = save(entity);
         logger.debug("Created " + className + ". New ID is '" + entity.getId() + "'");
 
         return entity;
