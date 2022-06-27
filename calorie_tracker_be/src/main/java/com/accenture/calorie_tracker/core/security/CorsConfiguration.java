@@ -1,4 +1,4 @@
-package ch.livenet.localsponsorship.config;
+package com.accenture.calorie_tracker.core.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

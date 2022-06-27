@@ -1,4 +1,4 @@
-package ch.livenet.localsponsorship.exception;
+package com.accenture.calorie_tracker.core.error;
 
 import org.springframework.security.core.AuthenticationException;
 
