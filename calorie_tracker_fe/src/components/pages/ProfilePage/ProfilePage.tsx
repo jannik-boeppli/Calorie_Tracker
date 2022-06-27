@@ -7,6 +7,7 @@ import {
   Card,
   Space,
   Input as AntInput,
+  message,
 } from "antd";
 import { Formik } from "formik";
 import React from "react";
@@ -61,6 +62,7 @@ export default function ProfilePage() {
       validationSchema={validationSchema}
       onSubmit={(values, helpers) => {
         console.log("test", values);
+        message.success("Clicked")
         helpers.setSubmitting(false);
         //TODO: Submit data to backend
       }}

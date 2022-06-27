@@ -22,6 +22,7 @@ module.exports = {
               "@layout-trigger-background": "#bfbfbf",
               "@layout-trigger-color": "#00000073",
               "@menu-item-color": "#000000D9",
+              "@message-notice-content-bg": "#8c8c8c",
             },
             javascriptEnabled: true,
           },
