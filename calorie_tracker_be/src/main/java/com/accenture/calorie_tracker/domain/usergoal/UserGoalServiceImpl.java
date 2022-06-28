@@ -36,11 +36,8 @@ public class UserGoalServiceImpl extends AbstractEntityServiceImpl<UserGoal> imp
     @Override
     protected UserGoal preSave(UserGoal newEntity) {
         //get user
-        User user = newEntity.getUser();
-        if (user.getId() != null) user = userService.findById(user.getId().toString());
-        else if (user.getUsername() != null) user = userService.findByUsername(user.getUsername());
-        if (user == null) throw new NotFoundException("User could not be found");
-        newEntity.setUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        newEntity.setUser(user);
 
         // set start_time and end_time
         UserGoal oldGoal = userGoalRepository.findByUserAndEndTimeIsNull(user);
@@ -53,10 +50,10 @@ public class UserGoalServiceImpl extends AbstractEntityServiceImpl<UserGoal> imp
 
         //get goal
         Goal goal = newEntity.getGoal();
-        if(goal.getId() != null) goal = goalService.findById(goal.getId().toString());
+        if (goal.getId() != null) goal = goalService.findById(goal.getId().toString());
         else goal = goalService.findByValue(goal);
 
-        if(goal == null) goal = goalService.save(newEntity.getGoal());
+        if (goal == null) goal = goalService.save(newEntity.getGoal());
         newEntity.setGoal(goal);
 
         return newEntity;
@@ -78,7 +75,7 @@ public class UserGoalServiceImpl extends AbstractEntityServiceImpl<UserGoal> imp
     }
 
     @Override
-    public List<UserGoal> findAllByUser (User user){
+    public List<UserGoal> findAllByUser(User user) {
         return ((UserGoalRepository) repository).findAllByUser(user);
     }
 }

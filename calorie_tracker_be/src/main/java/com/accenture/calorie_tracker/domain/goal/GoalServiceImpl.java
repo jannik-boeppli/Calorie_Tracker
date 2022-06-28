@@ -48,6 +48,22 @@ public class GoalServiceImpl extends AbstractEntityServiceImpl<Goal> implements 
 
     @Override
     public Goal findByValue(Goal goal) {
-        return ((GoalRepository) repository).findByBodyMassAndNutrition(goal.getBodyMass(), goal.getNutrition());
+        BodyMass bodyMass = goal.getBodyMass();
+        if (bodyMass != null){
+            if(bodyMass.getId() != null) bodyMass = bodyMassService.findById(bodyMass.getId().toString());
+            else bodyMass = bodyMassService.findByValue(goal.getBodyMass().getWeightInKg());
+
+            if (bodyMass == null) bodyMass = bodyMassService.save(goal.getBodyMass());
+        }
+
+        Nutrition nutrition = goal.getNutrition();
+        if (nutrition != null) {
+            if(nutrition.getId() != null) nutrition = nutritionService.findById(nutrition.getId().toString());
+            else nutrition = nutritionService.findByValue(goal.getNutrition());
+
+            if(nutrition == null) nutrition = nutritionService.save(goal.getNutrition());
+        }
+
+        return ((GoalRepository) repository).findByBodyMassAndNutrition(bodyMass, nutrition);
     }
 }
