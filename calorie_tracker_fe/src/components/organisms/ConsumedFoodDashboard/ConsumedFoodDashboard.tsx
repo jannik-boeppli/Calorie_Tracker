@@ -1,7 +1,8 @@
 import { Card, Typography } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Food from "../../../models/Food";
+import FoodService from "../../../services/FoodService";
 import useWindowDimensions from "../../../utils/WindowDimensions";
 import AddButton from "../../atoms/AddButton/AddButton";
 import LineDivider from "../../atoms/LineDivider/LineDivider";
@@ -10,9 +11,10 @@ import "./ConsumedFoodDashboard.css";
 
 export default function ConsumedFoodDashboard() {
   const { Title } = Typography;
-  const {width, height} = useWindowDimensions()
-  const isMobile = width < 1050
-  const navigation = useNavigate()
+  const { width, height } = useWindowDimensions();
+  const isMobile = width < 1050;
+  const navigation = useNavigate();
+
   const [foodToDisplay, setFoodToDisplay] = useState<Food[]>([
     {
       amount: 250,
@@ -55,10 +57,30 @@ export default function ConsumedFoodDashboard() {
       carbs: 53,
     },
   ]);
+/*
+  useEffect(() => {
+    console.log("useEffect")
+    FoodService()
+      .getConsumedFoodToday()
+      .then((value) =>{
+        console.log(value)
+        setFoodToDisplay(
+          value.map(
+            ({ registeredFood }: { registeredFood: Food }) => registeredFood
+          )s
+        )}
+      );
+  }, []);*/
 
   return (
     <Card
-    style={isMobile ? {} : height < 1050 ? {marginTop: "2em"} : {marginTop: "4em"}}
+      style={
+        isMobile
+          ? {}
+          : height < 1050
+          ? { marginTop: "2em" }
+          : { marginTop: "4em" }
+      }
       bodyStyle={{ height: "100%" }}
       className="consumed-food-dashboard-card"
     >
@@ -72,13 +94,13 @@ export default function ConsumedFoodDashboard() {
         <div style={{ flex: "1", overflow: "auto" }}>
           {foodToDisplay.map((food) => (
             <ConsumedFoodCard
-            amount={food.amount}
-            name={food.name}
-            calories={food.calories}
-            protein={food.protein}
-            fat={food.fat}
-            carbs={food.carbs}
-          />
+              amount={food.amount}
+              name={food.name}
+              calories={food.calories}
+              protein={food.protein}
+              fat={food.fat}
+              carbs={food.carbs}
+            />
           ))}
         </div>
         <div>

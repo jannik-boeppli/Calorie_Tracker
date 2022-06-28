@@ -59,6 +59,12 @@ public class UserGoalServiceImpl extends AbstractEntityServiceImpl<UserGoal> imp
     }
 
     @Override
+    public UserGoal getOpenGoal() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userGoalRepository.findByUserAndEndTimeIsNull(user);
+    }
+
+    @Override
     public UserGoal findById(String id) throws NotFoundException {
         UserGoal userGoal = super.findById(id);
 

@@ -1,6 +1,6 @@
 import { Card, Col, Row } from "antd";
 import { Form, Formik } from "formik";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useWindowDimensions from "../../../utils/WindowDimensions";
 import CalorieIcon from "../../atoms/CalorieIcon/CalorieIcon";
 import CarbIcon from "../../atoms/CarbIcon/CarbIcon";
@@ -11,9 +11,23 @@ import WeightIcon from "../../atoms/WeightIcon/WeightIcon";
 import NutritionGoal from "../../molecules/NutritionGoal/NutritionGoal";
 import "./NutritionGoalsPage.css";
 import * as Yup from "yup";
+import UserGoal from "../../../models/UserGoal";
+import GoalService from "../../../services/GoalService";
 
 export default function NutritionGoalsPage() {
   const iconDimensions = { height: "10vmin", width: "10vmin" };
+  const [userGoal, setUserGoal] = useState<UserGoal>({
+    nutrition: { calories: 0, carbs: 0, protein: 0, fat: 0 },
+    bodyMass: { weightInKg: 0 },
+  });
+  useEffect(() => {
+    GoalService().getUserGoal().then((data) => {console.log(data); setUserGoal({...data.goal})})
+  }, [])
+  useEffect(() => {
+    console.log(userGoal)
+  }, [userGoal])
+  
+  
   const isMobile = useWindowDimensions().width < 850;
   const validationSchema = Yup.object({
     calories: Yup.number()
@@ -32,20 +46,21 @@ export default function NutritionGoalsPage() {
       .typeError("Please only enter decimal numbers")
       .required("You must fill out this field")
       .integer("Please round to the next whole number"),
-    bodyWeight: Yup.number()
+    weightInKg: Yup.number()
       .typeError("Please only enter decimal numbers")
       .required("You must fill out this field")
       .integer("Please round to the next whole number"),
   });
   return (
     <Formik
+    enableReinitialize
       validationSchema={validationSchema}
       initialValues={{
-        calories: "",
-        protein: "",
-        fat: "",
-        carbs: "",
-        bodyWeight: "",
+        calories: userGoal.nutrition && userGoal.nutrition.calories !== 0 ? userGoal.nutrition.calories : "",
+        protein: userGoal.nutrition && userGoal.nutrition.protein !== 0 ? userGoal.nutrition.protein : "",
+        fat: userGoal.nutrition && userGoal.nutrition.fat !== 0 ? userGoal.nutrition.fat : "",
+        carbs: userGoal.nutrition && userGoal.nutrition.carbs !== 0 ? userGoal.nutrition.carbs : "",
+        weightInKg: userGoal.bodyMass && userGoal.bodyMass.weightInKg !== 0 ? userGoal.bodyMass.weightInKg : "",
       }}
       onSubmit={(values, helpers) => {
         console.log(values);
@@ -117,12 +132,12 @@ export default function NutritionGoalsPage() {
               <Col span={isMobile ? 22 : 9} style={{ margin: "auto" }}>
                 <NutritionGoal
                   icon={<WeightIcon {...iconDimensions} />}
-                  error={errors.bodyWeight}
-                  status={errors.bodyWeight && "error"}
+                  error={errors.weightInKg}
+                  status={errors.weightInKg && "error"}
                   placeholder="Bodyweight Goal"
                   onChange={handleChange}
-                  value={values.bodyWeight}
-                  name="bodyWeight"
+                  value={values.weightInKg}
+                  name="weightInKg"
                   suffix="kg"
                 />
               </Col>

@@ -1,7 +1,16 @@
-import ApiService from "./ApiService";
+import ApiService from './ApiService'
 
-const FoodService = () => {
-    //getFoodConsumedToday: 
-}
+const baseURL = "/consumedfood"
 
-export default FoodService;
+const FoodService = () => ({
+  getConsumedFoodToday: async () => {
+      const {data} = await ApiService.get(baseURL + "/now");
+      return data;
+  },
+  getConsumedFoodHistory: async () => {
+    const {data} = await ApiService.get(baseURL + "/");
+    return data;
+} 
+})
+
+export default FoodService
