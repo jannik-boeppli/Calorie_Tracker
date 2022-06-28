@@ -22,7 +22,6 @@ public class ConsumedFoodController extends AbstractEntityController<ConsumedFoo
 
     @GetMapping("/now")
     public ResponseEntity<Collection<ConsumedFoodDTO>> findAllNow() {
-
         Collection<ConsumedFood> dms = ((ConsumedFoodService) service).findAllFromDate();
 
         return new ResponseEntity<>(mapper.toDTOs(dms), HttpStatus.OK);
@@ -34,6 +33,4 @@ public class ConsumedFoodController extends AbstractEntityController<ConsumedFoo
 
         return new ResponseEntity<>(dms, HttpStatus.OK);
     }
-
-
 }
