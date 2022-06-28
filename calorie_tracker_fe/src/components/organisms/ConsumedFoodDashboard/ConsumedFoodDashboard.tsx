@@ -1,4 +1,4 @@
-import { Card, Typography } from "antd";
+import { Card, Empty, Typography } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Food from "../../../models/Food";
@@ -18,6 +18,19 @@ export default function ConsumedFoodDashboard({food}: PropsType) {
   const isMobile = width < 1050;
   const navigation = useNavigate();
   
+
+  const renderCards = () => {
+    if (food.length === 0) {
+      return <Empty imageStyle={{width: "100%", height: "100%", margin: "auto"}} description={<Title style={{color: "#389e0d"}} underline onClick={() => navigation("/food")} level={5}>No entries yet, create one!</Title>}/>
+    }
+    return (food.map((singleFood) => (
+      <ConsumedFoodCard
+        amount={singleFood.amount}
+        name={singleFood.name}
+        nutrition={singleFood.nutrition}
+      />)
+    ))
+  }
 
   return (
     <Card
@@ -39,13 +52,7 @@ export default function ConsumedFoodDashboard({food}: PropsType) {
           <LineDivider />
         </div>
         <div style={{ flex: "1", overflow: "auto" }}>
-          {food.map((singleFood) => (
-            <ConsumedFoodCard
-              amount={singleFood.amount}
-              name={singleFood.name}
-              nutrition={singleFood.nutrition}
-            />
-          ))}
+          {renderCards()}
         </div>
         <div>
           <LineDivider />

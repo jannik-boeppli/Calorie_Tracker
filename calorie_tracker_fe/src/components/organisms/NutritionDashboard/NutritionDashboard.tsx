@@ -42,12 +42,12 @@ export default function NutritionDashboard({goal, food}: PropsType) {
       <Space
         className="progress-dashboard-space"
         direction={width < 1050 ? "vertical" : "horizontal"}
-        size={consumedTotal.calories}
+        size={46}
       >
         <div>
           <CircularProgress
             max={goal.nutrition.calories}
-            reached={600}
+            reached={consumedTotal.calories}
             className="calorie-progress"
             strokeColor="#bae637"
             format={() => (
@@ -96,7 +96,7 @@ export default function NutritionDashboard({goal, food}: PropsType) {
               </div>
             )}
           />
-          <div  className="progress-subtitle-container">
+          <div className="progress-subtitle-container">
           <Title
             level={3}
             style={width < 1050 ? {marginTop: "0.5em"} : { marginTop: "0.5em", marginLeft: "auto", marginRight: "auto", width: "7.5em", position: "absolute", textAlign: "center" }}
