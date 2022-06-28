@@ -8,6 +8,7 @@ import SignUpIcon from "../../atoms/SignUpIcon/SignUpIcon";
 import "./LoginPage.css";
 import * as Yup from "yup";
 import Input from "../../atoms/Input/Input";
+import { useAuth } from "../../../contexts/AuthenticationContext";
 
 export default function LoginPage() {
   const [isHoveringLink, setIsHoveringLink] = useState(false);
@@ -23,7 +24,7 @@ export default function LoginPage() {
       .max(255, "The password can't be longer than 255 characters"),
   });
 
-  console.log(hasSubmitted);
+  const {login} = useAuth();
 
   return (
     <Formik
@@ -32,9 +33,8 @@ export default function LoginPage() {
       validationSchema={validationSchema}
       onSubmit={(values, helpers) => {
         console.log(values);
+        login(values.username, values.password).then(() => navigate("/"))
         helpers.setSubmitting(false);
-        
-        //TODO: Submit data to backend
       }}
     >
       {({ isSubmitting, submitForm, handleChange, values, errors }) => (

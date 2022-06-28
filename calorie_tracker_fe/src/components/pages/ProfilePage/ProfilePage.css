@@ -1,3 +1,11 @@
 .adjusted-half {
     height: 35vh;
 }
+
+.profile-top-half {
+    min-height: 30vh;
+}
+
+.profile-page-card {
+    width: 60%;
+}

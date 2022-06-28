@@ -10,12 +10,12 @@ export default function LandingPage() {
   
   return (
     <div style={width < 1050 ? {} : {display: "flex", flexFlow: "column", height: "100vh"}}>
-      <Row style={width < 1050 ? {} : {height: "30vh"}}>
+      <Row style={width < 1050 || height < 1050 ? {} : {height: "30vh"}}>
         <Col span={24}>
           <NutritionDashboard />
         </Col>
       </Row>
-      <Row style={width < 1050 ? {height: (height - 25) + "px"} : {height: "70vh"}} >
+      <Row style={width < 1050 || height < 1050 ? {height: (height - 25) + "px"} : {height: "70vh"}} >
         <Col style={{height: "100%"}} span={width < 1050 ? 24 : 12}>
           <ConsumedFoodDashboard />
         </Col>
