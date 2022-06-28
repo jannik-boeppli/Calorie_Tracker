@@ -1,6 +1,6 @@
-import { Card, Col, Row } from "antd";
+import { Card, Col, message, Row } from "antd";
 import { Form, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useWindowDimensions from "../../../utils/WindowDimensions";
 import AddButton from "../../atoms/AddButton/AddButton";
 import CalorieIcon from "../../atoms/CalorieIcon/CalorieIcon";
@@ -11,11 +11,15 @@ import Input from "../../atoms/Input/Input";
 import ProteinIcon from "../../atoms/ProteinIcon/ProteinIcon";
 import "./AddFoodPage.css";
 import * as Yup from "yup";
+import FoodService from "../../../services/FoodService";
+import RegisteredFood from "../../../models/RegisteredFood";
+import Food from "../../../models/Food";
 
 export default function AddFoodPage() {
   const iconDimensions = { width: "1em", height: "1em" };
   const [searchString, setSearchString] = useState("");
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [storedFood, setStoredFood] = useState<Food[]>([]);
   const [initialValues, setInitialValues] = useState({
     name: "",
     amount: "",
@@ -25,39 +29,34 @@ export default function AddFoodPage() {
     carbs: "",
   });
   const isMobile = useWindowDimensions().width < 850;
-  const food = [
-    {
-      id: "1",
-      name: "Spagetthi",
-      amount: 500,
-      calories: 600,
-      protein: 60,
-      fat: 42,
-      carbs: 90,
-    },
-    {
-      id: "2",
-      name: "Nudeln",
-      amount: 200,
-      calories: 300,
-      protein: 30,
-      fat: 12,
-      carbs: 40,
-    },
-  ];
+  useEffect(() => {
+    FoodService()
+      .getRegisteredFood()
+      .then((registeredFood: RegisteredFood[]) => {
+        console.log(registeredFood);
+        setStoredFood(
+          registeredFood.map((singleFood) => {
+            return { ...singleFood.food };
+          })
+        );
+      });
+  }, []);
+  useEffect(() => {
+    console.log(storedFood)
+  }, [storedFood]);
 
   const searchFunction = (value: string) => {
     console.log(value);
-    const foundItem = food.find((item) => item.id === value);
+    const foundItem = storedFood.find((item) => item.id === value);
     console.log(foundItem);
     if (foundItem) {
       setInitialValues({
         name: foundItem.name,
-        amount: foundItem.amount + "",
-        calories: foundItem.calories + "",
-        protein: foundItem.protein + "",
-        fat: foundItem.fat + "",
-        carbs: foundItem.carbs + "",
+        amount: "",
+        calories: foundItem.nutrition.calories + "",
+        protein: foundItem.nutrition.protein + "",
+        fat: foundItem.nutrition.fat + "",
+        carbs: foundItem.nutrition.carbs + "",
       });
       setSearchString(foundItem.name);
     }
@@ -95,8 +94,25 @@ export default function AddFoodPage() {
       initialValues={initialValues}
       onSubmit={(values, helpers) => {
         console.log(values);
-        helpers.setSubmitting(false);
-        //TODO: Connect to backend
+        FoodService()
+          .registerFood({
+            name: values.name,
+            nutrition: {
+              calories: +values.calories,
+              carbs: +values.carbs,
+              fat: +values.fat,
+              protein: +values.protein,
+            },
+            amount: +values.amount,
+          })
+          .then((registeredFood) => {
+            FoodService()
+              .addConsumedFood({ ...registeredFood })
+              .then(() => {
+                message.success("Added food");
+                helpers.setSubmitting(false);
+              });
+          });
       }}
     >
       {({ submitForm, values, errors, isSubmitting, handleChange }) => (
@@ -107,7 +123,7 @@ export default function AddFoodPage() {
                 <FoodSearchbar
                   value={searchString}
                   onChange={setSearchString}
-                  food={food}
+                  food={storedFood}
                   onSelect={searchFunction}
                 />
               </Col>

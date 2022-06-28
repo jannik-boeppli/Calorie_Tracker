@@ -1,5 +1,7 @@
 import { Card, Space, Typography } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Food from "../../../models/Food";
+import UserGoal from "../../../models/UserGoal";
 import useWindowDimensions from "../../../utils/WindowDimensions";
 import CalorieIcon from "../../atoms/CalorieIcon/CalorieIcon";
 import CarbIcon from "../../atoms/CarbIcon/CarbIcon";
@@ -8,19 +10,43 @@ import FatIcon from "../../atoms/FatIcon/FatIcon";
 import ProteinIcon from "../../atoms/ProteinIcon/ProteinIcon";
 import "./NutritionDashboard.css";
 
-export default function NutritionDashboard() {
+interface PropsType {
+  goal: UserGoal,
+  food: Food[],
+}
+
+interface ConsumedTotal {
+  calories: number,
+  protein: number,
+  carbs: number,
+  fat: number,
+}
+
+export default function NutritionDashboard({goal, food}: PropsType) {
   const { width } = useWindowDimensions();
   const { Title } = Typography;
+  const [consumedTotal, setConsumedTotal] = useState<ConsumedTotal>({calories: 0, protein: 0, carbs: 0, fat: 0})
+  useEffect(() => {
+    let total = {calories: 0, protein: 0, carbs: 0, fat: 0};
+    food.forEach((value) => {
+      total.calories += value.nutrition.calories
+      total.protein += value.nutrition.protein
+      total.carbs += value.nutrition.carbs
+      total.fat += value.nutrition.fat
+    })
+    setConsumedTotal(total);
+  }, [food])
+  
   return (
     <Card className="nutrition-dashboard-card">
       <Space
         className="progress-dashboard-space"
         direction={width < 1050 ? "vertical" : "horizontal"}
-        size={46}
+        size={consumedTotal.calories}
       >
         <div>
           <CircularProgress
-            max={1800}
+            max={goal.nutrition.calories}
             reached={600}
             className="calorie-progress"
             strokeColor="#bae637"
@@ -32,9 +58,9 @@ export default function NutritionDashboard() {
                   </div>
                   <div>
                     <Title className="progress-label-text" level={2}>
-                      600cal/
+                      {consumedTotal.calories}cal/
                       <br />
-                      1800cal
+                      {goal.nutrition.calories}cal
                     </Title>
                   </div>
                 </div>
@@ -51,8 +77,8 @@ export default function NutritionDashboard() {
         </div>
         <div>
           <CircularProgress
-            max={120}
-            reached={40}
+            max={goal.nutrition.protein}
+            reached={consumedTotal.protein}
             className="protein-progress"
             strokeColor="#ff4d4f"
             format={() => (
@@ -63,7 +89,7 @@ export default function NutritionDashboard() {
                   </div>
                   <div>
                     <Title className="progress-label-text" level={3}>
-                      40g/120g
+                      {consumedTotal.protein}g/{goal.nutrition.protein}g
                     </Title>
                   </div>
                 </div>
@@ -81,8 +107,8 @@ export default function NutritionDashboard() {
         </div>
         <div>
           <CircularProgress
-            max={80}
-            reached={28}
+            max={goal.nutrition.fat}
+            reached={consumedTotal.fat}
             className="fat-progress"
             strokeColor="#ffec3d"
             format={() => (
@@ -93,7 +119,7 @@ export default function NutritionDashboard() {
                   </div>
                   <div>
                     <Title className="progress-label-text" level={3}>
-                      28g/80g
+                    {consumedTotal.fat}g/{goal.nutrition.fat}g
                     </Title>
                   </div>
                 </div>
@@ -111,8 +137,8 @@ export default function NutritionDashboard() {
         </div>
         <div>
         <CircularProgress
-          max={160}
-          reached={53}
+          max={goal.nutrition.carbs}
+          reached={consumedTotal.carbs}
           className="carb-progress"
           strokeColor="#ffa940"
           format={() => (
@@ -123,7 +149,7 @@ export default function NutritionDashboard() {
                 </div>
                 <div>
                   <Title className="progress-label-text" level={3}>
-                    53g/160g
+                    {consumedTotal.carbs}g/{goal.nutrition.carbs}g
                   </Title>
                 </div>
               </div>

@@ -1,5 +1,5 @@
 import { AutoComplete, AutoCompleteProps, Input, Typography } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Food from "../../../models/Food";
 import useWindowDimensions from "../../../utils/WindowDimensions";
 import CalorieIcon from "../CalorieIcon/CalorieIcon";
@@ -27,7 +27,7 @@ export default function FoodSearchbar(props: PropsType) {
             }}
           >
             <span>
-              <Title level={5}>{item.name}</Title> {item.amount}g
+              <Title level={5}>{item.name}</Title>
             </span>
             <span>
               <div
@@ -38,11 +38,11 @@ export default function FoodSearchbar(props: PropsType) {
               >
                 <span>
                   <CalorieIcon size="1em" />
-                  {item.calories}cal
+                  {item.nutrition.calories}cal
                 </span>
                 <span>
                   <ProteinIcon {...iconDimensions} />
-                  {item.protein}g
+                  {item.nutrition.protein}g
                 </span>
               </div>
               <div
@@ -53,11 +53,11 @@ export default function FoodSearchbar(props: PropsType) {
               >
                 <span>
                   <FatIcon {...iconDimensions} />
-                  {item.fat}g
+                  {item.nutrition.fat}g
                 </span>
                 <span>
                   <CarbIcon {...iconDimensions} />
-                  {item.carbs}g
+                  {item.nutrition.carbs}g
                 </span>
               </div>
             </span>
@@ -66,6 +66,12 @@ export default function FoodSearchbar(props: PropsType) {
       };
     });
   const [options, setOptions] = useState(convertFoodToOptions(props.food));
+
+  useEffect(() => {
+    setOptions(convertFoodToOptions(props.food))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.food])
+  
 
   const handleSearch = (value: string) => {
     if (value !== "") {

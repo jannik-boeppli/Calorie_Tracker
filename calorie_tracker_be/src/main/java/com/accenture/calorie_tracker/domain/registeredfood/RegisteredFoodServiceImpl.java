@@ -42,6 +42,15 @@ public class RegisteredFoodServiceImpl extends AbstractEntityServiceImpl<Registe
     }
 
     @Override
+    public RegisteredFood create(RegisteredFood entity) {
+        entity.setUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        RegisteredFood foundFood = findByValue(entity);
+        if (foundFood != null)
+            return foundFood;
+        return super.create(entity);
+    }
+
+    @Override
     public List<RegisteredFood> findAll() {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return super.findAll().stream()

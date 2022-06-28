@@ -1,76 +1,23 @@
 import { Card, Typography } from "antd";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import Food from "../../../models/Food";
-import FoodService from "../../../services/FoodService";
 import useWindowDimensions from "../../../utils/WindowDimensions";
 import AddButton from "../../atoms/AddButton/AddButton";
 import LineDivider from "../../atoms/LineDivider/LineDivider";
 import ConsumedFoodCard from "../../molecules/ConsumedFoodCard/ConsumedFoodCard";
 import "./ConsumedFoodDashboard.css";
 
-export default function ConsumedFoodDashboard() {
+interface PropsType {
+  food: Food[]
+}
+
+export default function ConsumedFoodDashboard({food}: PropsType) {
   const { Title } = Typography;
   const { width, height } = useWindowDimensions();
   const isMobile = width < 1050;
   const navigation = useNavigate();
-
-  const [foodToDisplay, setFoodToDisplay] = useState<Food[]>([
-    {
-      amount: 250,
-      name: "Spaghetti Bolognese",
-      calories: 1600,
-      protein: 40,
-      fat: 28,
-      carbs: 53,
-    },
-    {
-      amount: 250,
-      name: "Spaghetti Bolognese",
-      calories: 1600,
-      protein: 40,
-      fat: 28,
-      carbs: 53,
-    },
-    {
-      amount: 250,
-      name: "Spaghetti Bolognese",
-      calories: 1600,
-      protein: 40,
-      fat: 28,
-      carbs: 53,
-    },
-    {
-      amount: 250,
-      name: "Spaghetti Bolognese",
-      calories: 1600,
-      protein: 40,
-      fat: 28,
-      carbs: 53,
-    },
-    {
-      amount: 250,
-      name: "Spaghetti Bolognese",
-      calories: 1600,
-      protein: 40,
-      fat: 28,
-      carbs: 53,
-    },
-  ]);
-/*
-  useEffect(() => {
-    console.log("useEffect")
-    FoodService()
-      .getConsumedFoodToday()
-      .then((value) =>{
-        console.log(value)
-        setFoodToDisplay(
-          value.map(
-            ({ registeredFood }: { registeredFood: Food }) => registeredFood
-          )s
-        )}
-      );
-  }, []);*/
+  
 
   return (
     <Card
@@ -92,14 +39,11 @@ export default function ConsumedFoodDashboard() {
           <LineDivider />
         </div>
         <div style={{ flex: "1", overflow: "auto" }}>
-          {foodToDisplay.map((food) => (
+          {food.map((singleFood) => (
             <ConsumedFoodCard
-              amount={food.amount}
-              name={food.name}
-              calories={food.calories}
-              protein={food.protein}
-              fat={food.fat}
-              carbs={food.carbs}
+              amount={singleFood.amount}
+              name={singleFood.name}
+              nutrition={singleFood.nutrition}
             />
           ))}
         </div>

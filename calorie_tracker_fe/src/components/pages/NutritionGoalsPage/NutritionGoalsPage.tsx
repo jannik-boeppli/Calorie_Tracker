@@ -28,9 +28,6 @@ export default function NutritionGoalsPage() {
         setUserGoal({ ...data.goal });
       });
   }, []);
-  useEffect(() => {
-    console.log(userGoal);
-  }, [userGoal]);
 
   const isMobile = useWindowDimensions().width < 850;
   const validationSchema = Yup.object({

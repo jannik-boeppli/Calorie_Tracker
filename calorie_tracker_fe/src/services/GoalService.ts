@@ -9,6 +9,8 @@ const GoalService = () => ({
       return data;
   },
   createUserGoal: async (userGoal: UserGoal) => {
+    console.log("send")
+    console.log("value", {goal: userGoal})
     const {data} = await ApiService.post(baseURL + "/", {goal: userGoal});
     return data;
 } 
