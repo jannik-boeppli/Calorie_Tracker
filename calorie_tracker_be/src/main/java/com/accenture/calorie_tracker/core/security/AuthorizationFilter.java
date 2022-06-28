@@ -1,14 +1,11 @@
 package com.accenture.calorie_tracker.core.security;
 
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
+import com.accenture.calorie_tracker.domain.user.User;
+import com.accenture.calorie_tracker.domain.user.UserService;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -18,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -28,10 +24,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  * Processes the authorization header in a request and extracts the authorities of a user.
  */
 public class AuthorizationFilter extends OncePerRequestFilter {
-    private JWTManager jwtManager;
+    private final JWTManager jwtManager;
+    private final UserService userService;
 
-    public AuthorizationFilter(JWTManager jwtManager) {
+    public AuthorizationFilter(JWTManager jwtManager, UserService userService) {
         this.jwtManager = jwtManager;
+        this.userService = userService;
     }
 
     /**
@@ -55,9 +53,9 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             try {
                 String token = authorizationHeader.substring("Bearer ".length());
                 DecodedJWT decodedJWT = jwtManager.verifyToken(token);
-
+                User user = userService.findByUsername(decodedJWT.getSubject());
                 SecurityContextHolder.getContext().setAuthentication(
-                        new UsernamePasswordAuthenticationToken(decodedJWT.getSubject(), null, new ArrayList<>()));
+                        new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>()));
                 filterChain.doFilter(request, response);
             } catch (Exception e) {
                 response.setStatus(FORBIDDEN.value());

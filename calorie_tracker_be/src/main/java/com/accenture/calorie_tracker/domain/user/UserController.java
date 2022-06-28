@@ -6,6 +6,8 @@ import com.accenture.calorie_tracker.core.generic.DTOMapper;
 import com.accenture.calorie_tracker.domain.user.dto.UserDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,26 +16,31 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/user")
 public class UserController extends AbstractEntityController<User, UserDTO> {
+    UserService userService;
 
-    public UserController(AbstractEntityService<User> service, DTOMapper<User, UserDTO> mapper) {
+    public UserController(AbstractEntityService<User> service, DTOMapper<User, UserDTO> mapper, UserService userService) {
         super(service, mapper);
+        this.userService = userService;
     }
 
+    @GetMapping("/not-available")
     @Override
     public ResponseEntity<Collection<UserDTO>> findAll() {
         return null;
     }
 
+    @GetMapping("/")
     @Override
     public ResponseEntity<UserDTO> findById(String ignore) {
-        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return super.findById(currentUser.getId().toString());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return super.findById(user.getId().toString());
     }
 
+    @PutMapping("/")
     @Override
     public ResponseEntity<UserDTO> updateById(String ignore, UserDTO dto) {
-        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return super.updateById(currentUser.getId().toString(), dto);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return super.updateById(user.getId().toString(), dto);
     }
 
     @Override
