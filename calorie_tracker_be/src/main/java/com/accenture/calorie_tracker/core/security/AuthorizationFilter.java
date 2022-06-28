@@ -53,7 +53,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             try {
                 String token = authorizationHeader.substring("Bearer ".length());
                 DecodedJWT decodedJWT = jwtManager.verifyToken(token);
-                User user = userService.findByUsername(decodedJWT.getSubject());
+                User user = userService.findById(decodedJWT.getSubject());
                 SecurityContextHolder.getContext().setAuthentication(
                         new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>()));
                 filterChain.doFilter(request, response);

@@ -2,6 +2,7 @@ package com.accenture.calorie_tracker.core.security;
 
 import com.accenture.calorie_tracker.core.error.MissingUserCredentialsException;
 import com.accenture.calorie_tracker.core.error.UserNotFoundException;
+import com.accenture.calorie_tracker.domain.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,15 +29,17 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JWTManager jwtManager;
     private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
     /**
      * Initializes the filter
      */
     public AuthenticationFilter(
-            AuthenticationManager authenticationManager, JWTManager jwtManager, PasswordEncoder passwordEncoder) {
+            AuthenticationManager authenticationManager, JWTManager jwtManager, PasswordEncoder passwordEncoder, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtManager = jwtManager;
         this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
     }
 
     /**
@@ -97,8 +100,9 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                                             FilterChain chain, Authentication authResult)
             throws IOException {
         User user = (User) authResult.getPrincipal();
-        String accessToken = jwtManager.createAccessToken(user.getUsername());
-        String refreshToken = jwtManager.createRefreshToken(user.getUsername());
+        com.accenture.calorie_tracker.domain.user.User userModel = userService.findByUsername(user.getUsername());
+        String accessToken = jwtManager.createAccessToken(userModel.getId().toString());
+        String refreshToken = jwtManager.createRefreshToken(userModel.getId().toString());
         response.setContentType(APPLICATION_JSON_VALUE);
         response.setStatus(200);
         new ObjectMapper().writeValue(response.getOutputStream(), Map.of("access_token", accessToken, "refresh_token", refreshToken));

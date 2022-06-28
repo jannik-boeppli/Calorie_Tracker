@@ -38,7 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManagerBean(), jwtManager, passwordEncoder);
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManagerBean(), jwtManager, passwordEncoder, userService);
         authenticationFilter.setFilterProcessesUrl("/auth/login");
         http.csrf().disable();
         http.cors();

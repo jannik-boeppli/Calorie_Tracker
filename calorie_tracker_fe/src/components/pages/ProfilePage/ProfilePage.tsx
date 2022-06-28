@@ -72,7 +72,6 @@ export default function ProfilePage() {
       initialValues={user}
       validationSchema={validationSchema}
       onSubmit={(values, helpers) => {
-        console.log("values",values)
         UserService()
           .updateUser({
             ...values,
