@@ -1,5 +1,6 @@
 package com.accenture.calorie_tracker.core.security;
 
+import com.accenture.calorie_tracker.domain.user.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,11 +22,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final JWTManager jwtManager;
+    private final UserService userService;
 
-    public SecurityConfiguration(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, JWTManager jwtManager) {
+    public SecurityConfiguration(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, JWTManager jwtManager, UserService userService) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
         this.jwtManager = jwtManager;
+        this.userService = userService;
     }
 
     @Override
@@ -43,7 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/auth/**").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(authenticationFilter);
-        http.addFilterBefore(new AuthorizationFilter(jwtManager), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new AuthorizationFilter(jwtManager, userService), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

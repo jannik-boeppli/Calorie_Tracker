@@ -10,7 +10,7 @@ import {
   message,
 } from "antd";
 import { Formik } from "formik";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import * as Yup from "yup";
 import LineDivider from "../../atoms/LineDivider/LineDivider";
@@ -19,10 +19,29 @@ import "./ProfilePage.css";
 import "../LoginPage/LoginPage.css";
 import SaveButton from "../../atoms/SaveButton/SaveButton";
 import Input from "../../atoms/Input/Input";
+import UserService from "../../../services/UserService";
 
 export default function ProfilePage() {
-  const { Text, Title } = Typography;
+  const { Title } = Typography;
+  const [user, setUser] = useState({
+    firstName: "",
+    lastName: "",
+    username: "",
+    weightInKg: "",
+    heightInCM: "",
+  });
   const { width } = useWindowDimensions();
+
+  useEffect(() => {
+    UserService()
+      .getCurrentUser()
+      .then((value) =>
+        setUser({
+          ...value,
+          heightInCM: value.heightInCM === 0 ? "" : value.heightInCM,
+        })
+      );
+  }, []);
 
   const validationSchema = Yup.object({
     firstName: Yup.string()
@@ -34,15 +53,12 @@ export default function ProfilePage() {
     username: Yup.string()
       .required("Please enter a username")
       .max(255, "The username can't be longer than 255 characters"),
-    password: Yup.string()
-      .required("Please enter a password")
-      .max(255, "The password can't be longer than 255 characters"),
-    weight: Yup.number()
+    weightInKg: Yup.number()
       .required("Please enter a weight")
       .typeError("weight must consist of numbers only")
       .positive("weight must be greater than zero")
       .integer("weight should be rounded to the nearest kg"),
-    height: Yup.number()
+    heightInCM: Yup.number()
       .required("Please enter a height")
       .typeError("height must consist of numbers only")
       .positive("height must be greater than zero")
@@ -51,18 +67,20 @@ export default function ProfilePage() {
 
   return (
     <Formik
-      initialValues={{
-        firstName: "John",
-        lastName: "Doe",
-        username: "John_123",
-        password: "Doe",
-        weight: "67",
-        height: "176",
-      }}
+      enableReinitialize
+      initialValues={user}
       validationSchema={validationSchema}
       onSubmit={(values, helpers) => {
-        console.log("test", values);
-        message.success("Clicked")
+        console.log("values",values)
+        UserService()
+          .updateUser({
+            ...values,
+            bodyMass: { weightInKg: +values.weightInKg },
+            heightInCM: +values.heightInCM,
+          })
+          .then(() => message.success("Profile successfully updated"))
+          .catch((error) => console.log(error));
+
         helpers.setSubmitting(false);
         //TODO: Submit data to backend
       }}
@@ -70,6 +88,7 @@ export default function ProfilePage() {
       {({ isSubmitting, submitForm, handleChange, values, errors }) => (
         <Form>
           <Row className={width < 1050 ? "adjusted-half" : "profile-top-half"}>
+            
             <Col span={24} className="center">
               <UserOutlined style={{ fontSize: "30vmin", color: "#389e0d" }} />
             </Col>
@@ -122,10 +141,10 @@ export default function ProfilePage() {
                   <LineDivider />
                   <div>
                     <Input
-                      error={errors.weight}
-                      value={values.weight}
+                      error={errors.weightInKg}
+                      value={values.weightInKg}
                       onChange={handleChange}
-                      name="weight"
+                      name="weightInKg"
                       size="large"
                       placeholder="Weight"
                       suffix={"kg"}
@@ -133,10 +152,10 @@ export default function ProfilePage() {
                   </div>
                   <div>
                     <Input
-                      error={errors.height}
-                      value={values.height}
+                      error={errors.heightInCM}
+                      value={values.heightInCM}
                       onChange={handleChange}
-                      name="height"
+                      name="heightInCM"
                       size="large"
                       placeholder="Height"
                       suffix={"cm"}
@@ -147,13 +166,15 @@ export default function ProfilePage() {
                     level={width < 1050 ? 3 : 2}
                   >
                     {Math.round(
-                      (+values.weight / +values.height / +values.height) *
+                      (+values.weightInKg /
+                        +values.heightInCM /
+                        +values.heightInCM) *
                         100000
                     ) / 10 || "-"}{" "}
                     BMI
                   </Title>
                   <SaveButton
-                    onClick={() => submitForm()}
+                    onClick={() => {console.log("submitting"); submitForm()}}
                     loading={isSubmitting}
                     disabled={isSubmitting}
                   />
