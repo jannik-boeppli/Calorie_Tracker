@@ -35,12 +35,13 @@ export default function ProfilePage() {
   useEffect(() => {
     UserService()
       .getCurrentUser()
-      .then((value) =>
+      .then((value) =>{
+        console.log(value)
         setUser({
           ...value,
-          weightInKg: value.bodyMass.weightInKg === 0 ? "" : value.bodyMass.weightInKg,
+          weightInKg: value.bodyMass && value.bodyMass.weightInKg !== 0 ? value.bodyMass.weightInKg : "",
           heightInCM: value.heightInCM === 0 ? "" : value.heightInCM,
-        })
+        })}
       );
   }, []);
 
