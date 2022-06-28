@@ -3,6 +3,7 @@ package com.accenture.calorie_tracker.domain.user;
 import com.accenture.calorie_tracker.core.error.NotFoundException;
 import com.accenture.calorie_tracker.core.generic.AbstractEntityRepository;
 import com.accenture.calorie_tracker.core.generic.AbstractEntityServiceImpl;
+import com.accenture.calorie_tracker.domain.bodymass.BodyMass;
 import com.accenture.calorie_tracker.domain.bodymass.BodyMassService;
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -34,8 +35,13 @@ public class UserServiceImpl extends AbstractEntityServiceImpl<User> implements 
 
     @Override
     public User preSave(User entity) {
-        if (entity.getBodyMass() != null && bodyMassService.findByValue(entity.getBodyMass().getWeightInKg()) == null) {
-            entity.setId(UUID.randomUUID());
+        if (entity.getBodyMass() != null) {
+            BodyMass foundBodyMass = bodyMassService.findByValue(entity.getBodyMass().getWeightInKg());
+            if (foundBodyMass == null) {
+                entity.getBodyMass().setId(UUID.randomUUID());
+            } else {
+                entity.getBodyMass().setId(foundBodyMass.getId());
+            }
             bodyMassService.save(entity.getBodyMass());
         }
         return entity;
@@ -50,10 +56,9 @@ public class UserServiceImpl extends AbstractEntityServiceImpl<User> implements 
     @Override
     public User updateById(String id, User entity) throws NotFoundException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         if (user != null) {
+            entity.setId(user.getId());
             BeanUtils.copyProperties(entity, user, getNullPropertyNames(entity));
-            user.setId(UUID.fromString(id));
             entity = save(user);
             return entity;
         } else {

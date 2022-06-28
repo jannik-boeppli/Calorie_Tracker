@@ -101,6 +101,7 @@ public abstract class AbstractEntityServiceImpl<T extends AbstractEntity> implem
                 emptyNames.add(pd.getName());
             }
         }
+        emptyNames.add("id");
         String[] result = new String[emptyNames.size()];
         return emptyNames.toArray(result);
     }

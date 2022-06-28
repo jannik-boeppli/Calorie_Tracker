@@ -38,6 +38,7 @@ export default function ProfilePage() {
       .then((value) =>
         setUser({
           ...value,
+          weightInKg: value.bodyMass.weightInKg === 0 ? "" : value.bodyMass.weightInKg,
           heightInCM: value.heightInCM === 0 ? "" : value.heightInCM,
         })
       );
