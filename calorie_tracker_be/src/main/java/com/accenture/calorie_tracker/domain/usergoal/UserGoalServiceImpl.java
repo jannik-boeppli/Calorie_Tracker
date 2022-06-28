@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +32,7 @@ public class UserGoalServiceImpl extends AbstractEntityServiceImpl<UserGoal> imp
         this.userGoalRepository = userGoalRepository;
     }
 
+    @Transactional
     @Override
     protected UserGoal preSave(UserGoal newEntity) {
         //get user
@@ -43,8 +45,10 @@ public class UserGoalServiceImpl extends AbstractEntityServiceImpl<UserGoal> imp
         // set start_time and end_time
         UserGoal oldGoal = userGoalRepository.findByUserAndEndTimeIsNull(user);
         LocalDateTime now = LocalDateTime.now();
-        oldGoal.setEndTime(now);
-        updateById(oldGoal.getUser().getId().toString(), oldGoal);
+        if (oldGoal != null) {
+            oldGoal.setEndTime(now);
+            userGoalRepository.save(oldGoal);
+        }
         newEntity.setStartTime(now);
 
         //get goal

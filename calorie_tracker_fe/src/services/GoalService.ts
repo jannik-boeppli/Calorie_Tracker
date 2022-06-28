@@ -9,7 +9,7 @@ const GoalService = () => ({
       return data;
   },
   createUserGoal: async (userGoal: UserGoal) => {
-    const {data} = await ApiService.post(baseURL + "/", userGoal);
+    const {data} = await ApiService.post(baseURL + "/", {goal: userGoal});
     return data;
 } 
 })

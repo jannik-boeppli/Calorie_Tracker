@@ -1,4 +1,4 @@
-import { Card, Col, Row } from "antd";
+import { Card, Col, message, Row } from "antd";
 import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import useWindowDimensions from "../../../utils/WindowDimensions";
@@ -21,13 +21,17 @@ export default function NutritionGoalsPage() {
     bodyMass: { weightInKg: 0 },
   });
   useEffect(() => {
-    GoalService().getUserGoal().then((data) => {console.log(data); setUserGoal({...data.goal})})
-  }, [])
+    GoalService()
+      .getUserGoal()
+      .then((data) => {
+        console.log(data);
+        setUserGoal({ ...data.goal });
+      });
+  }, []);
   useEffect(() => {
-    console.log(userGoal)
-  }, [userGoal])
-  
-  
+    console.log(userGoal);
+  }, [userGoal]);
+
   const isMobile = useWindowDimensions().width < 850;
   const validationSchema = Yup.object({
     calories: Yup.number()
@@ -53,19 +57,44 @@ export default function NutritionGoalsPage() {
   });
   return (
     <Formik
-    enableReinitialize
+      enableReinitialize
       validationSchema={validationSchema}
       initialValues={{
-        calories: userGoal.nutrition && userGoal.nutrition.calories !== 0 ? userGoal.nutrition.calories : "",
-        protein: userGoal.nutrition && userGoal.nutrition.protein !== 0 ? userGoal.nutrition.protein : "",
-        fat: userGoal.nutrition && userGoal.nutrition.fat !== 0 ? userGoal.nutrition.fat : "",
-        carbs: userGoal.nutrition && userGoal.nutrition.carbs !== 0 ? userGoal.nutrition.carbs : "",
-        weightInKg: userGoal.bodyMass && userGoal.bodyMass.weightInKg !== 0 ? userGoal.bodyMass.weightInKg : "",
+        calories:
+          userGoal.nutrition && userGoal.nutrition.calories !== 0
+            ? userGoal.nutrition.calories
+            : "",
+        protein:
+          userGoal.nutrition && userGoal.nutrition.protein !== 0
+            ? userGoal.nutrition.protein
+            : "",
+        fat:
+          userGoal.nutrition && userGoal.nutrition.fat !== 0
+            ? userGoal.nutrition.fat
+            : "",
+        carbs:
+          userGoal.nutrition && userGoal.nutrition.carbs !== 0
+            ? userGoal.nutrition.carbs
+            : "",
+        weightInKg:
+          userGoal.bodyMass && userGoal.bodyMass.weightInKg !== 0
+            ? userGoal.bodyMass.weightInKg
+            : "",
       }}
       onSubmit={(values, helpers) => {
         console.log(values);
+        GoalService().createUserGoal({
+          nutrition: {
+            calories: +values.calories,
+            carbs: +values.carbs,
+            fat: +values.fat,
+            protein: +values.protein,
+          },
+          bodyMass: {
+            weightInKg: +values.weightInKg
+          }
+        }).then(() => message.success("Updated goal"));
         helpers.setSubmitting(false);
-        //TODO: Connect to backend
       }}
     >
       {({ submitForm, isSubmitting, errors, values, handleChange }) => (
