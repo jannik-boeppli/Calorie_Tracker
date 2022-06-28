@@ -10,7 +10,10 @@ import com.accenture.calorie_tracker.domain.user.User;
 import com.accenture.calorie_tracker.domain.user.UserService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserGoalServiceImpl extends AbstractEntityServiceImpl<UserGoal> implements UserGoalService {
@@ -27,12 +30,7 @@ public class UserGoalServiceImpl extends AbstractEntityServiceImpl<UserGoal> imp
 
     @Override
     protected UserGoal preSave(UserGoal newEntity) {
-        //get user
-        User user = newEntity.getUser();
-        if (user.getId() != null) user = userService.findById(user.getId().toString());
-        else if (user.getUsername() != null) user = userService.findByUsername(user.getUsername());
-        if (user == null) throw new NotFoundException("User could not be found");
-        newEntity.setUser(user);
+        newEntity.setUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         //get goal
         Goal goal = newEntity.getGoal();
@@ -43,5 +41,19 @@ public class UserGoalServiceImpl extends AbstractEntityServiceImpl<UserGoal> imp
         newEntity.setGoal(goal);
 
         return newEntity;
+    }
+
+    @Override
+    public UserGoal findById(String id) throws NotFoundException {
+        UserGoal userGoal = super.findById(id);
+
+        return userGoal.getUser().getId()
+                .equals(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId())
+                ? userGoal : null;
+    }
+
+    @Override
+    public List<UserGoal> findAllByUser (User user){
+        return ((UserGoalRepository) repository).findAllByUser(user);
     }
 }
