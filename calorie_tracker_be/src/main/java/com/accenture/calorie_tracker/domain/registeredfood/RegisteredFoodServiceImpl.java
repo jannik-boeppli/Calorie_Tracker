@@ -1,13 +1,15 @@
 package com.accenture.calorie_tracker.domain.registeredfood;
 
-import com.accenture.calorie_tracker.core.error.NotFoundException;
 import com.accenture.calorie_tracker.core.generic.AbstractEntityServiceImpl;
 import com.accenture.calorie_tracker.domain.food.Food;
 import com.accenture.calorie_tracker.domain.food.FoodService;
 import com.accenture.calorie_tracker.domain.user.User;
 import com.accenture.calorie_tracker.domain.user.UserService;
 import org.slf4j.Logger;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class RegisteredFoodServiceImpl extends AbstractEntityServiceImpl<RegisteredFood> implements RegisteredFoodService {
@@ -23,12 +25,7 @@ public class RegisteredFoodServiceImpl extends AbstractEntityServiceImpl<Registe
 
     @Override
     protected RegisteredFood preSave(RegisteredFood newEntity) {
-        //get user
-        User user = newEntity.getUser();
-        if (user.getId() != null) user = userService.findById(user.getId().toString());
-        else if (user.getUsername() != null) user = userService.findByUsername(user.getUsername());
-        if (user == null) throw new NotFoundException("User could not be found");
-        newEntity.setUser(user);
+        newEntity.setUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         //get food
         Food food = newEntity.getFood();
@@ -45,5 +42,10 @@ public class RegisteredFoodServiceImpl extends AbstractEntityServiceImpl<Registe
     @Override
     public RegisteredFood findByValue(RegisteredFood registeredFood) {
         return ((RegisteredFoodRepository) repository).findByFoodAndUser(registeredFood.getFood(), registeredFood.getUser());
+    }
+
+    @Override
+    public List<RegisteredFood> findAllByUser(User user) {
+        return ((RegisteredFoodRepository) repository).findAllByUser(user);
     }
 }

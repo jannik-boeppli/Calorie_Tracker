@@ -54,12 +54,9 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             throws AuthenticationException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        System.out.println(username);
-        System.out.println(password);
         if (username == null || password == null) {
             throw new MissingUserCredentialsException();
         }
-        System.out.println(passwordEncoder.encode(password));
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         try {
             return authenticationManager.authenticate(authenticationToken);
