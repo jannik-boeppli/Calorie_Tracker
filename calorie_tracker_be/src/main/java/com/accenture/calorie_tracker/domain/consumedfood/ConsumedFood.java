@@ -13,13 +13,16 @@ public class ConsumedFood extends AbstractEntity {
     @Column(name = "time_of_consumption", nullable = false)
     private LocalDateTime timeOfConsumption;
 
+    @Column(name = "amount", nullable = false)
+    private int amount;
 
     @ManyToOne
     @JoinColumn(name = "user_registered_food_id", nullable = false)
     private RegisteredFood registeredFood;
 
-    public ConsumedFood(LocalDateTime timeOfConsumption, RegisteredFood registeredFood) {
+    public ConsumedFood(LocalDateTime timeOfConsumption, int amount, RegisteredFood registeredFood) {
         this.timeOfConsumption = timeOfConsumption;
+        this.amount = amount;
         this.registeredFood = registeredFood;
     }
 
@@ -38,6 +41,15 @@ public class ConsumedFood extends AbstractEntity {
 
     public ConsumedFood setTimeOfConsumption(LocalDateTime timeOfConsumption) {
         this.timeOfConsumption = timeOfConsumption;
+        return this;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public ConsumedFood setAmount(int amount) {
+        this.amount = amount;
         return this;
     }
 

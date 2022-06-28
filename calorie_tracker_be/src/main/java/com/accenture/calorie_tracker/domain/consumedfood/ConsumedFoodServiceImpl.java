@@ -72,7 +72,9 @@ public class ConsumedFoodServiceImpl extends AbstractEntityServiceImpl<ConsumedF
             ConsumedFoodByDateDTO listElement = history.stream().filter(consumedFoodByDateDTO -> fmt.format(consumedFoodByDateDTO.getLocalDateTime()).equals(fmt.format(food.getTimeOfConsumption()))).findFirst().orElse(null);
             if (listElement == null) {
                 listElement = new ConsumedFoodByDateDTO();
+                listElement.setLocalDateTime(food.getTimeOfConsumption());
                 listElement.setNutrition(food.getRegisteredFood().getFood().getNutrition());
+                listElement.setAmount(food.getAmount());
                 history.add(listElement);
             } else {
                 listElement.getNutrition().setProtein(listElement.getNutrition().getProtein() +
@@ -83,6 +85,7 @@ public class ConsumedFoodServiceImpl extends AbstractEntityServiceImpl<ConsumedF
                         food.getRegisteredFood().getFood().getNutrition().getCarbs());
                 listElement.getNutrition().setCalories(listElement.getNutrition().getCalories() +
                         food.getRegisteredFood().getFood().getNutrition().getCalories());
+                listElement.setAmount(listElement.getAmount() + food.getAmount());
             }
         }
 
