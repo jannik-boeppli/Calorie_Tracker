@@ -2,23 +2,17 @@ package com.accenture.calorie_tracker.domain.user.dto;
 
 public class UserSignUpDTO {
     private String username;
-    private String password;
     private String firstName;
     private String lastName;
 
-    public UserSignUpDTO(String username, String password, String firstName, String lastName) {
+    public UserSignUpDTO(String username, String firstName, String lastName) {
         this.username = username;
-        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
     public String getUsername() {
         return username;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public String getFirstName() {
@@ -31,10 +25,6 @@ public class UserSignUpDTO {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public void setFirstName(String firstName) {

@@ -1,10 +1,13 @@
 package com.accenture.calorie_tracker.domain.user;
 
+import com.accenture.calorie_tracker.core.error.NotFoundException;
 import com.accenture.calorie_tracker.core.generic.AbstractEntityRepository;
 import com.accenture.calorie_tracker.core.generic.AbstractEntityServiceImpl;
 import com.accenture.calorie_tracker.domain.bodymass.BodyMassService;
 import org.slf4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -42,6 +45,20 @@ public class UserServiceImpl extends AbstractEntityServiceImpl<User> implements 
     public User create(User entity) {
         entity.setPassword(passwordEncoder.encode(entity.getPassword()));
         return super.create(entity);
+    }
+
+    @Override
+    public User updateById(String id, User entity) throws NotFoundException {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (user != null) {
+            BeanUtils.copyProperties(entity, user, getNullPropertyNames(entity));
+            user.setId(UUID.fromString(id));
+            entity = save(user);
+            return entity;
+        } else {
+            throw new NotFoundException("User could not be found");
+        }
     }
 
     @Override
