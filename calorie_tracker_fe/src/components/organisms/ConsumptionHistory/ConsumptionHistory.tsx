@@ -8,7 +8,8 @@ import "./ConsumptionHistory.css";
 
 export default function ConsumptionHistory() {
   const { Title } = Typography;
-  const isMobile = useWindowDimensions().width < 1050
+  const {width, height} = useWindowDimensions()
+  const isMobile = width < 1050
 
 
   const [daysToDisplay, setDaysToDisplay] = useState<ConsumptionDay[]>([
@@ -51,7 +52,7 @@ export default function ConsumptionHistory() {
 
   return (
     <Card
-    style={isMobile ? {} : {marginTop: "4em"}}
+    style={isMobile ? {} : height < 1050 ? {marginTop: "2em"} : {marginTop: "4em"}}
       bodyStyle={{ height: "100%" }}
       className="consumption-history-dashboard-card"
     >

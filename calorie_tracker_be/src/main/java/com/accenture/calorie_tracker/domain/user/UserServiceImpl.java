@@ -1,27 +1,37 @@
 package com.accenture.calorie_tracker.domain.user;
 
+import com.accenture.calorie_tracker.core.generic.AbstractEntityRepository;
 import com.accenture.calorie_tracker.core.generic.AbstractEntityServiceImpl;
 import com.accenture.calorie_tracker.domain.bodymass.BodyMassService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
-public class UserServiceImpl extends AbstractEntityServiceImpl<User> implements UserService {
+public class UserServiceImpl extends AbstractEntityServiceImpl<User> implements UserService, UserDetailsService {
 
     private BodyMassService bodyMassService;
+    private final UserRepository newRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository repository, Logger logger, BodyMassService bodyMassService) {
+    public UserServiceImpl(AbstractEntityRepository<User> repository, Logger logger, BodyMassService bodyMassService, UserRepository newRepository, PasswordEncoder passwordEncoder) {
         super(repository, logger);
         this.bodyMassService = bodyMassService;
+        this.newRepository = newRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    protected User preSave(User entity) {
-        if (bodyMassService.findByValue(entity.getBodyMass().getWeightInKg()) == null){
+    public User preSave(User entity) {
+        if (entity.getBodyMass() != null && bodyMassService.findByValue(entity.getBodyMass().getWeightInKg()) == null) {
             entity.setId(UUID.randomUUID());
             bodyMassService.save(entity.getBodyMass());
         }
@@ -29,6 +39,19 @@ public class UserServiceImpl extends AbstractEntityServiceImpl<User> implements 
     }
 
     @Override
+    public User create(User entity) {
+        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+        return super.create(entity);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = newRepository.findByUsername(username);
+        if (user == null)
+            throw new UsernameNotFoundException("User doesn't exist");
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
+    }
+
     public User findByUsername(String username) {
         return ((UserRepository) repository).findByUsername(username);
     }
