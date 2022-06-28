@@ -6,7 +6,6 @@ import {
   Col,
   Card,
   Space,
-  Input as AntInput,
   message,
 } from "antd";
 import { Formik } from "formik";
