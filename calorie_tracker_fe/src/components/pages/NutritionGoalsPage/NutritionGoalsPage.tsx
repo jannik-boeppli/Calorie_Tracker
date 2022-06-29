@@ -49,7 +49,11 @@ export default function NutritionGoalsPage() {
     weightInKg: Yup.number()
       .typeError("Please only enter decimal numbers")
       .required("You must fill out this field")
-      .integer("Please round to the next whole number"),
+      .test(
+        "maxDigitsAfterDecimal",
+        "weight have 1 digit after the decimal point or less",
+        (number) => number !== undefined && Number.isInteger(number * 10)
+      ),
   });
   return (
     <Formik
@@ -78,7 +82,6 @@ export default function NutritionGoalsPage() {
             : "",
       }}
       onSubmit={(values, helpers) => {
-        console.log(values);
         GoalService().createUserGoal({
           nutrition: {
             calories: +values.calories,

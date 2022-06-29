@@ -38,8 +38,7 @@ public class UserServiceImpl extends AbstractEntityServiceImpl<User> implements 
         if (entity.getBodyMass() != null) {
             BodyMass foundBodyMass = bodyMassService.findByValue(entity.getBodyMass().getWeightInKg());
             if (foundBodyMass == null) {
-                entity.getBodyMass().setId(UUID.randomUUID());
-                bodyMassService.save(entity.getBodyMass());
+                entity.setBodyMass(bodyMassService.save(entity.getBodyMass()));
             } else {
                 entity.getBodyMass().setId(foundBodyMass.getId());
             }

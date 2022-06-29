@@ -8,6 +8,10 @@ import LineDivider from "../../atoms/LineDivider/LineDivider";
 import ConsumptionDayCard from "../../molecules/ConsumptionDayCard/ConsumptionDayCard";
 import "./ConsumptionHistory.css";
 
+interface Entry extends Nutrition{
+  date: Date,
+}
+
 export default function ConsumptionHistory() {
   const { Title } = Typography;
   const { width, height } = useWindowDimensions();
@@ -22,7 +26,7 @@ export default function ConsumptionHistory() {
         setDaysToDisplay(
           data.map((day: { localDateTime: Date; nutrition: Nutrition }) => {
             return { ...day.nutrition, date: new Date(day.localDateTime) };
-          })
+          }).sort((a: Entry, b: Entry) => a.date.getTime() < b.date.getTime() ? 1 : -1)
         );
       });
   }, []);

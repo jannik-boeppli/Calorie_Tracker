@@ -8,35 +8,44 @@ import CarbIcon from "../../atoms/CarbIcon/CarbIcon";
 import CircularProgress from "../../atoms/CircularProgress/CircularProgress";
 import FatIcon from "../../atoms/FatIcon/FatIcon";
 import ProteinIcon from "../../atoms/ProteinIcon/ProteinIcon";
+import WeightIcon from "../../atoms/WeightIcon/WeightIcon";
 import "./NutritionDashboard.css";
 
 interface PropsType {
-  goal: UserGoal,
-  food: Food[],
+  goal: UserGoal;
+  food: Food[];
+  weightInKg: number;
 }
 
 interface ConsumedTotal {
-  calories: number,
-  protein: number,
-  carbs: number,
-  fat: number,
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+  weightInKg: number;
 }
 
-export default function NutritionDashboard({goal, food}: PropsType) {
+export default function NutritionDashboard({ goal, food, weightInKg }: PropsType) {
   const { width } = useWindowDimensions();
   const { Title } = Typography;
-  const [consumedTotal, setConsumedTotal] = useState<ConsumedTotal>({calories: 0, protein: 0, carbs: 0, fat: 0})
+  const [consumedTotal, setConsumedTotal] = useState<ConsumedTotal>({
+    calories: 0,
+    protein: 0,
+    carbs: 0,
+    fat: 0,
+    weightInKg: 0,
+  });
   useEffect(() => {
-    let total = {calories: 0, protein: 0, carbs: 0, fat: 0};
+    let total = { calories: 0, protein: 0, carbs: 0, fat: 0 };
     food.forEach((value) => {
-      total.calories += value.nutrition.calories
-      total.protein += value.nutrition.protein
-      total.carbs += value.nutrition.carbs
-      total.fat += value.nutrition.fat
-    })
-    setConsumedTotal(total);
-  }, [food])
-  
+      total.calories += value.nutrition.calories;
+      total.protein += value.nutrition.protein;
+      total.carbs += value.nutrition.carbs;
+      total.fat += value.nutrition.fat;
+    });
+    setConsumedTotal({...total, weightInKg: weightInKg});
+  }, [food, weightInKg]);
+
   return (
     <Card className="nutrition-dashboard-card">
       <Space
@@ -54,10 +63,10 @@ export default function NutritionDashboard({goal, food}: PropsType) {
               <div className="icon-label-container">
                 <div>
                   <div>
-                    <CalorieIcon size="3em"/>
+                    <CalorieIcon size="2em" />
                   </div>
                   <div>
-                    <Title className="progress-label-text" level={2}>
+                    <Title className="progress-label-text" level={3}>
                       {consumedTotal.calories}cal/
                       <br />
                       {goal.nutrition.calories}cal
@@ -69,7 +78,7 @@ export default function NutritionDashboard({goal, food}: PropsType) {
           />
           <Title
             level={3}
-            style={ { marginTop: "0.5em"}}
+            style={{ marginTop: "0.5em" }}
             className="progress-subtitle"
           >
             Calories
@@ -85,11 +94,13 @@ export default function NutritionDashboard({goal, food}: PropsType) {
               <div className="icon-label-container">
                 <div>
                   <div>
-                    <ProteinIcon width="2em" height="2em" />
+                    <ProteinIcon width="1em" height="1em" />
                   </div>
                   <div>
-                    <Title className="progress-label-text" level={3}>
-                      {consumedTotal.protein}g/{goal.nutrition.protein}g
+                    <Title className="progress-label-text" level={4}>
+                      {consumedTotal.protein}g/
+                      <br />
+                      {goal.nutrition.protein}g
                     </Title>
                   </div>
                 </div>
@@ -97,13 +108,25 @@ export default function NutritionDashboard({goal, food}: PropsType) {
             )}
           />
           <div className="progress-subtitle-container">
-          <Title
-            level={3}
-            style={width < 1050 ? {marginTop: "0.5em"} : { marginTop: "0.5em", marginLeft: "auto", marginRight: "auto", width: "7.5em", position: "absolute", textAlign: "center" }}
-            className="progress-subtitle"
-          >
-            Protein
-          </Title></div>
+            <Title
+              level={3}
+              style={
+                width < 1050
+                  ? { marginTop: "0.5em" }
+                  : {
+                      marginTop: "0.5em",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                      width: "5em",
+                      position: "absolute",
+                      textAlign: "center",
+                    }
+              }
+              className="progress-subtitle"
+            >
+              Protein
+            </Title>
+          </div>
         </div>
         <div>
           <CircularProgress
@@ -115,11 +138,13 @@ export default function NutritionDashboard({goal, food}: PropsType) {
               <div className="icon-label-container">
                 <div>
                   <div>
-                    <FatIcon width="2em" height="2em" />
+                    <FatIcon width="1em" height="1em" />
                   </div>
                   <div>
-                    <Title className="progress-label-text" level={3}>
-                    {consumedTotal.fat}g/{goal.nutrition.fat}g
+                    <Title className="progress-label-text" level={4}>
+                      {consumedTotal.fat}g/
+                      <br />
+                      {goal.nutrition.fat}g
                     </Title>
                   </div>
                 </div>
@@ -127,44 +152,112 @@ export default function NutritionDashboard({goal, food}: PropsType) {
             )}
           />
           <div className="progress-subtitle-container">
-          <Title
-            level={3}
-            style={width < 1050 ? {marginTop: "0.5em",} : { marginTop: "0.5em", marginLeft: "auto", marginRight: "auto", width: "7.5em", position: "absolute", textAlign: "center" }}
-            className="progress-subtitle"
-          >
-            Fat
-          </Title></div>
+            <Title
+              level={3}
+              style={
+                width < 1050
+                  ? { marginTop: "0.5em" }
+                  : {
+                      marginTop: "0.5em",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                      width: "5em",
+                      position: "absolute",
+                      textAlign: "center",
+                    }
+              }
+              className="progress-subtitle"
+            >
+              Fat
+            </Title>
+          </div>
         </div>
         <div>
-        <CircularProgress
-          max={goal.nutrition.carbs}
-          reached={consumedTotal.carbs}
-          className="carb-progress"
-          strokeColor="#ffa940"
-          format={() => (
-            <div className="icon-label-container">
-              <div>
+          <CircularProgress
+            max={goal.nutrition.carbs}
+            reached={consumedTotal.carbs}
+            className="carb-progress"
+            strokeColor="#ffa940"
+            format={() => (
+              <div className="icon-label-container">
                 <div>
-                  <CarbIcon width="2em" height="2em" />
-                </div>
-                <div>
-                  <Title className="progress-label-text" level={3}>
-                    {consumedTotal.carbs}g/{goal.nutrition.carbs}g
-                  </Title>
+                  <div>
+                    <CarbIcon width="1em" height="1em" />
+                  </div>
+                  <div>
+                    <Title className="progress-label-text" level={4}>
+                      {consumedTotal.carbs}g/
+                      <br />
+                      {goal.nutrition.carbs}g
+                    </Title>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        />
-        <div className="progress-subtitle-container">
-        <Title
-          level={3}
-          style={width < 1050 ? {marginTop: "0.5em"} : { marginTop: "0.5em", marginLeft: "auto", marginRight: "auto", width: "7.5em", position: "absolute", textAlign: "center" }}
-          className="progress-subtitle"
-        >
-          Carbohydrates
-        </Title>
+            )}
+          />
+          <div className="progress-subtitle-container">
+            <Title
+              level={3}
+              style={
+                width < 1050
+                  ? { marginTop: "0.5em" }
+                  : {
+                      marginTop: "0.5em",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                      width: "5em",
+                      position: "absolute",
+                      textAlign: "center",
+                    }
+              }
+              className="progress-subtitle"
+            >
+              Carbs
+            </Title>
+          </div>
         </div>
+        <div>
+          <CircularProgress
+            max={goal.bodyMass.weightInKg}
+            reached={consumedTotal.weightInKg}
+            className="weight-progress"
+            strokeColor="#389e0d"
+            format={() => (
+              <div className="icon-label-container">
+                <div>
+                  <div>
+                    <WeightIcon width="1em" height="1em" />
+                  </div>
+                  <div>
+                    <Title className="progress-label-text" level={4}>
+                      {consumedTotal.weightInKg}kg/ <br />
+                      {goal.bodyMass.weightInKg}kg
+                    </Title>
+                  </div>
+                </div>
+              </div>
+            )}
+          />
+          <div className="progress-subtitle-container">
+            <Title
+              level={3}
+              style={
+                width < 1050
+                  ? { marginTop: "0.5em" }
+                  : {
+                      marginTop: "0.5em",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                      width: "5em",
+                      position: "absolute",
+                      textAlign: "center",
+                    }
+              }
+              className="progress-subtitle"
+            >
+              Weight
+            </Title>
+          </div>
         </div>
       </Space>
     </Card>
