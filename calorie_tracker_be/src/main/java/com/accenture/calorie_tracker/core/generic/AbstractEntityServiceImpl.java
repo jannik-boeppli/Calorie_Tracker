@@ -1,6 +1,7 @@
 package com.accenture.calorie_tracker.core.generic;
 
 import com.accenture.calorie_tracker.core.error.NotFoundException;
+import com.accenture.calorie_tracker.core.error.UsernameAlreadyExistsException;
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
@@ -72,7 +73,7 @@ public abstract class AbstractEntityServiceImpl<T extends AbstractEntity> implem
     }
 
     @Override
-    public T updateById(String id, T entity) throws NotFoundException {
+    public T updateById(String id, T entity) throws NotFoundException, UsernameAlreadyExistsException {
         logger.debug("Attempting to update " + className + " with ID '" + id + "'");
 
         T foundEntity = findById(id);

@@ -26,6 +26,8 @@ interface ConsumedTotal {
 }
 
 export default function NutritionDashboard({ goal, food, weightInKg }: PropsType) {
+  goal.nutrition = goal.nutrition || {calories: 0, protein: 0, carbs: 0, fat: 0,}
+  goal.bodyMass = goal.bodyMass || {weightInKg: 0}
   const { width } = useWindowDimensions();
   const { Title } = Typography;
   const [consumedTotal, setConsumedTotal] = useState<ConsumedTotal>({

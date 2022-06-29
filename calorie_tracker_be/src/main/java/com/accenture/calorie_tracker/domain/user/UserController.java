@@ -1,5 +1,6 @@
 package com.accenture.calorie_tracker.domain.user;
 
+import com.accenture.calorie_tracker.core.error.UsernameAlreadyExistsException;
 import com.accenture.calorie_tracker.core.generic.AbstractEntityController;
 import com.accenture.calorie_tracker.core.generic.AbstractEntityService;
 import com.accenture.calorie_tracker.core.generic.DTOMapper;
@@ -35,7 +36,7 @@ public class UserController extends AbstractEntityController<User, UserDTO> {
 
     @PutMapping("/")
     @Override
-    public ResponseEntity<UserDTO> updateById(String ignore,@RequestBody UserDTO dto) {
+    public ResponseEntity<UserDTO> updateById(String ignore,@RequestBody UserDTO dto) throws UsernameAlreadyExistsException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return super.updateById(user.getId().toString(), dto);
     }

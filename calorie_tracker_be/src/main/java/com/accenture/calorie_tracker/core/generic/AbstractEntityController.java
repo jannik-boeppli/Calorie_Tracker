@@ -1,5 +1,6 @@
 package com.accenture.calorie_tracker.core.generic;
 
+import com.accenture.calorie_tracker.core.error.UsernameAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public abstract class AbstractEntityController<DM extends AbstractEntity, DTO ex
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DTO> updateById(@PathVariable String id, @RequestBody DTO dto) {
+    public ResponseEntity<DTO> updateById(@PathVariable String id, @RequestBody DTO dto) throws UsernameAlreadyExistsException {
         DM dm = service.updateById(id, mapper.fromDTO(dto));
 
         return new ResponseEntity<>(mapper.toDTO(dm), HttpStatus.OK);
