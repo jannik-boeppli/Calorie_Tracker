@@ -57,7 +57,11 @@ export default function ProfilePage() {
       .required("Please enter a weight")
       .typeError("weight must consist of numbers only")
       .positive("weight must be greater than zero")
-      .integer("weight should be rounded to the nearest kg"),
+      .test(
+        "maxDigitsAfterDecimal",
+        "weight have 1 digit after the decimal point or less",
+        (number) => number !== undefined && Number.isInteger(number * 10)
+      ),
     heightInCM: Yup.number()
       .required("Please enter a height")
       .typeError("height must consist of numbers only")
