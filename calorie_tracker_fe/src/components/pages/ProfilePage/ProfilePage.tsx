@@ -83,6 +83,9 @@ export default function ProfilePage() {
             heightInCM: +values.heightInCM,
           })
           .then(() => message.success("Profile successfully updated"))
+          .catch((error) =>
+          {console.log(error); message.error(error.response.data)}
+         );
 
         helpers.setSubmitting(false);
       }}

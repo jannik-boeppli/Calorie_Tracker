@@ -20,7 +20,8 @@ const AuthenticationService = () => ({
       return data;
     },
   signup:async (user:User) => {
-    return ApiService.post(baseURL + "signup", user)
+    console.log({...user})
+    return ApiService.post(baseURL + "signup", {...user})
   }
 })
 

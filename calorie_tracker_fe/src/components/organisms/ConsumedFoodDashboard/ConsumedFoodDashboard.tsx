@@ -9,28 +9,42 @@ import ConsumedFoodCard from "../../molecules/ConsumedFoodCard/ConsumedFoodCard"
 import "./ConsumedFoodDashboard.css";
 
 interface PropsType {
-  food: Food[]
+  food: Food[];
 }
 
-export default function ConsumedFoodDashboard({food}: PropsType) {
+export default function ConsumedFoodDashboard({ food }: PropsType) {
   const { Title } = Typography;
   const { width, height } = useWindowDimensions();
   const isMobile = width < 1050;
   const navigation = useNavigate();
-  
 
   const renderCards = () => {
     if (food.length === 0) {
-      return <Empty imageStyle={{width: "100%", height: "100%", margin: "auto"}} description={<Title style={{color: "#389e0d"}} underline onClick={() => navigation("/food")} level={5}>No entries yet, create one!</Title>}/>
+      return (
+        <Empty
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          imageStyle={{ width: "100%", height: "100%", margin: "auto" }}
+          description={
+            <Title
+              style={{ color: "#389e0d" }}
+              underline
+              onClick={() => navigation("/food")}
+              level={5}
+            >
+              No entries yet, create one!
+            </Title>
+          }
+        />
+      );
     }
-    return (food.map((singleFood) => (
+    return food.map((singleFood) => (
       <ConsumedFoodCard
         amount={singleFood.amount}
         name={singleFood.name}
         nutrition={singleFood.nutrition}
-      />)
-    ))
-  }
+      />
+    ));
+  };
 
   return (
     <Card
@@ -51,9 +65,7 @@ export default function ConsumedFoodDashboard({food}: PropsType) {
           </Title>
           <LineDivider />
         </div>
-        <div style={{ flex: "1", overflow: "auto" }}>
-          {renderCards()}
-        </div>
+        <div style={{ flex: "1", overflow: "auto" }}>{renderCards()}</div>
         <div>
           <LineDivider />
           <AddButton onClick={() => navigation("/food")} />

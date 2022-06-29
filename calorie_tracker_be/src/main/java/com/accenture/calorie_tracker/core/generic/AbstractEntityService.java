@@ -1,6 +1,7 @@
 package com.accenture.calorie_tracker.core.generic;
 
 import com.accenture.calorie_tracker.core.error.NotFoundException;
+import com.accenture.calorie_tracker.core.error.UsernameAlreadyExistsException;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface AbstractEntityService<T extends AbstractEntity>{
 
     T save(T entity);
 
-    T updateById(String id, T entity) throws NotFoundException;
+    T updateById(String id, T entity) throws NotFoundException, UsernameAlreadyExistsException;
 
     void deleteById(String id) throws NotFoundException;
 

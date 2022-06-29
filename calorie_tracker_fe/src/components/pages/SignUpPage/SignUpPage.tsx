@@ -17,10 +17,12 @@ import { useState } from "react";
 import Input from "../../atoms/Input/Input";
 import AuthenticationService from "../../../services/AuthenticationService";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../contexts/AuthenticationContext";
 
 export default function SignUpPage() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const { Text } = Typography;
+  const {login} = useAuth()
   const navigation = useNavigate();
   const validationSchema = Yup.object({
     firstName: Yup.string()
@@ -57,11 +59,14 @@ export default function SignUpPage() {
         AuthenticationService()
           .signup({ ...values })
           .then(() => {
-            helpers.setSubmitting(false);
-            navigation("/login");
+            login(values.username, values.password)
+              .then(() => {
+                navigation("/");
+                helpers.setSubmitting(false);
+              });
           })
           .catch((error) =>
-            message.error("An unexpected error occured: " + error.response.data)
+           {console.log(error); message.error(error.response.data)}
           );
         helpers.setSubmitting(false);
         //TODO: Submit data to backend
@@ -77,6 +82,7 @@ export default function SignUpPage() {
           <Row className="login-half">
             <Col span={24} className="center">
               <Card
+                style={{ paddingTop: "2em", paddingBottom: "2em" }}
                 className="center login-card"
                 bodyStyle={{ width: "75%", height: "100%" }}
               >

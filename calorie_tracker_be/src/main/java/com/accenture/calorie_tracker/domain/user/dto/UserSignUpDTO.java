@@ -4,11 +4,21 @@ public class UserSignUpDTO {
     private String username;
     private String firstName;
     private String lastName;
+    private String password;
 
-    public UserSignUpDTO(String username, String firstName, String lastName) {
+    public UserSignUpDTO(String username, String firstName, String lastName, String password) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getUsername() {

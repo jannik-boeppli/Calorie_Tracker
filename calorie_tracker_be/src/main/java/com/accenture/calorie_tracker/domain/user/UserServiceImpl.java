@@ -1,6 +1,7 @@
 package com.accenture.calorie_tracker.domain.user;
 
 import com.accenture.calorie_tracker.core.error.NotFoundException;
+import com.accenture.calorie_tracker.core.error.UsernameAlreadyExistsException;
 import com.accenture.calorie_tracker.core.generic.AbstractEntityRepository;
 import com.accenture.calorie_tracker.core.generic.AbstractEntityServiceImpl;
 import com.accenture.calorie_tracker.domain.bodymass.BodyMass;
@@ -53,10 +54,13 @@ public class UserServiceImpl extends AbstractEntityServiceImpl<User> implements 
     }
 
     @Override
-    public User updateById(String id, User entity) throws NotFoundException {
+    public User updateById(String id, User entity) throws NotFoundException, UsernameAlreadyExistsException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (user != null) {
             entity.setId(user.getId());
+            User foundUser = findByUsername(entity.getUsername());
+            if (foundUser != null && !foundUser.getId().equals(user.getId()))
+                throw new UsernameAlreadyExistsException();
             BeanUtils.copyProperties(entity, user, getNullPropertyNames(entity));
             entity = save(user);
             return entity;
