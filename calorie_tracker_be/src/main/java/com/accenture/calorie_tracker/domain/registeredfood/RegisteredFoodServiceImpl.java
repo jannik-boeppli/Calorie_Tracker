@@ -35,19 +35,10 @@ public class RegisteredFoodServiceImpl extends AbstractEntityServiceImpl<Registe
         else food = foodService.findByValue(newEntity.getFood());
 
         if (food == null) food = foodService.save(newEntity.getFood());
-
         newEntity.setFood(food);
 
-        return newEntity;
-    }
-
-    @Override
-    public RegisteredFood create(RegisteredFood entity) {
-        entity.setUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        RegisteredFood foundFood = findByValue(entity);
-        if (foundFood != null)
-            return foundFood;
-        return super.create(entity);
+        RegisteredFood existingFood = findByValue(newEntity);
+        return existingFood != null ? existingFood : newEntity;
     }
 
     @Override
