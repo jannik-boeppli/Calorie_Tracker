@@ -6,12 +6,12 @@
   justify-content: center;
   align-items: center;
 }
-h2.progress-label-text, h3.progress-label-text {
+h2.progress-label-text, h4.progress-label-text, h3.progress-label-text {
   color: white;  
 }
 .calorie-progress .ant-progress-inner {
-  width: 10em !important;
-  height: 10em !important;
+  width: 7.5em !important;
+  height: 7.5em !important;
 }
 circle.ant-progress-circle-trail {
     stroke: #8c8c8c;
@@ -26,7 +26,7 @@ h3.progress-subtitle {
     height: 100%;
 }
 
-.protein-progress .ant-progress-inner, .fat-progress .ant-progress-inner, .carb-progress .ant-progress-inner {
-    width: 7.5em !important;
-    height: 7.5em !important;
+.protein-progress .ant-progress-inner, .fat-progress .ant-progress-inner, .carb-progress .ant-progress-inner, .weight-progress .ant-progress-inner {
+    width: 5em !important;
+    height: 5em !important;
 }

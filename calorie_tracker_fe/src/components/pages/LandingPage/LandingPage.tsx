@@ -2,9 +2,11 @@ import { Col, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import Food from "../../../models/Food";
 import RegisteredFood from "../../../models/RegisteredFood";
+import User from "../../../models/User";
 import UserGoal from "../../../models/UserGoal";
 import FoodService from "../../../services/FoodService";
 import GoalService from "../../../services/GoalService";
+import UserService from "../../../services/UserService";
 import useWindowDimensions from "../../../utils/WindowDimensions";
 import ConsumedFoodDashboard from "../../organisms/ConsumedFoodDashboard/ConsumedFoodDashboard";
 import ConsumptionHistory from "../../organisms/ConsumptionHistory/ConsumptionHistory";
@@ -14,6 +16,7 @@ export default function LandingPage() {
   const {width, height} = useWindowDimensions()
   const [foodToDisplay, setFoodToDisplay] = useState<Food[]>([]);
   const [goals, setGoals] = useState<UserGoal>({bodyMass: {weightInKg: 0}, nutrition: {calories: 0, carbs: 0, protein: 0, fat: 0}})
+  const [user, setUser] = useState<User>()
 
   useEffect(() => {
     FoodService()
@@ -30,13 +33,14 @@ export default function LandingPage() {
       .then((data) => {
         setGoals({ ...data.goal });
       });
+      UserService().getCurrentUser().then((value) => setUser(value));
   }, []);
 
   return (
     <div style={width < 1050 ? {} : {display: "flex", flexFlow: "column", height: "100vh"}}>
       <Row style={width < 1050 || height < 1050 ? {} : {height: "30vh"}}>
         <Col span={24}>
-          <NutritionDashboard goal={goals} food={foodToDisplay}  />
+          <NutritionDashboard weightInKg={user && user.bodyMass ? user.bodyMass.weightInKg : 0} goal={goals} food={foodToDisplay}  />
         </Col>
       </Row>
       <Row style={width < 1050 || height < 1050 ? {height: (height - 25) + "px"} : {height: "70vh"}} >

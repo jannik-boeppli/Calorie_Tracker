@@ -71,6 +71,7 @@ export default function ProfilePage() {
       initialValues={user}
       validationSchema={validationSchema}
       onSubmit={(values, helpers) => {
+        console.log(values)
         UserService()
           .updateUser({
             ...values,
@@ -80,7 +81,6 @@ export default function ProfilePage() {
           .then(() => message.success("Profile successfully updated"))
 
         helpers.setSubmitting(false);
-        //TODO: Submit data to backend
       }}
     >
       {({ isSubmitting, submitForm, handleChange, values, errors }) => (
