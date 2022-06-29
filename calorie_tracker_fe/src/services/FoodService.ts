@@ -1,6 +1,6 @@
 import ApiService from './ApiService'
 import Food from "../models/Food";
-import RegisteredFood from '../models/RegisteredFood';
+import ConsumedFood from '../models/ConsumedFood';
 
 const baseURL = "/consumedfood"
 
@@ -13,8 +13,9 @@ const FoodService = () => ({
     const {data} = await ApiService.get(baseURL + "/");
     return data;
 },
-  addConsumedFood: async (food: RegisteredFood) => {
-    const {data} = await ApiService.post(baseURL + "/", {registeredFood: food, amount: food.food.amount});
+  addConsumedFood: async (consumedfood: ConsumedFood) => {
+    console.log(consumedfood)
+    const {data} = await ApiService.post(baseURL + "/", {registeredFood: consumedfood.registeredFood, amount: consumedfood.amount});
     return data;
 },
   getRegisteredFood: async () => {

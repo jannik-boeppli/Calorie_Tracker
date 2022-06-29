@@ -41,9 +41,6 @@ export default function AddFoodPage() {
         );
       });
   }, []);
-  useEffect(() => {
-    console.log(storedFood)
-  }, [storedFood]);
 
   const searchFunction = (value: string) => {
     console.log(value);
@@ -103,11 +100,14 @@ export default function AddFoodPage() {
               fat: +values.fat,
               protein: +values.protein,
             },
-            amount: +values.amount,
           })
           .then((registeredFood) => {
+            console.log(registeredFood)
             FoodService()
-              .addConsumedFood({ ...registeredFood })
+              .addConsumedFood({
+                registeredFood: registeredFood,
+                amount: +values.amount,
+              })
               .then(() => {
                 message.success("Added food");
                 helpers.setSubmitting(false);

@@ -13,43 +13,7 @@ export default function ConsumptionHistory() {
   const { width, height } = useWindowDimensions();
   const isMobile = width < 1050;
 
-  const [daysToDisplay, setDaysToDisplay] = useState<ConsumptionDay[]>([
-    {
-      date: new Date("2022-06-13"),
-      calories: 1600,
-      protein: 40,
-      fat: 28,
-      carbs: 53,
-    },
-    {
-      date: new Date("2022-06-13"),
-      calories: 1600,
-      protein: 40,
-      fat: 28,
-      carbs: 53,
-    },
-    {
-      date: new Date("2022-06-13"),
-      calories: 1600,
-      protein: 40,
-      fat: 28,
-      carbs: 53,
-    },
-    {
-      date: new Date("2022-06-13"),
-      calories: 1600,
-      protein: 40,
-      fat: 28,
-      carbs: 53,
-    },
-    {
-      date: new Date("2022-06-13"),
-      calories: 1600,
-      protein: 40,
-      fat: 28,
-      carbs: 53,
-    },
-  ]);
+  const [daysToDisplay, setDaysToDisplay] = useState<ConsumptionDay[]>([]);
 
   useEffect(() => {
     FoodService()

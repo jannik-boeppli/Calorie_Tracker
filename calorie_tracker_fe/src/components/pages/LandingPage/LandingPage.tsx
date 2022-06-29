@@ -1,6 +1,7 @@
 import { Col, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import Food from "../../../models/Food";
+import RegisteredFood from "../../../models/RegisteredFood";
 import UserGoal from "../../../models/UserGoal";
 import FoodService from "../../../services/FoodService";
 import GoalService from "../../../services/GoalService";
@@ -21,7 +22,7 @@ export default function LandingPage() {
         console.log(value)
         setFoodToDisplay(
           value.map(
-            ({ registeredFood }: { registeredFood: Food }) => registeredFood
+            ({ registeredFood, amount }: { registeredFood: RegisteredFood, amount: number }) => {return {...registeredFood.food, amount: amount}}
           )
         )}
       );
