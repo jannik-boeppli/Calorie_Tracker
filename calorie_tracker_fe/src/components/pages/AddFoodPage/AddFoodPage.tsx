@@ -33,7 +33,6 @@ export default function AddFoodPage() {
     FoodService()
       .getRegisteredFood()
       .then((registeredFood: RegisteredFood[]) => {
-        console.log(registeredFood);
         setStoredFood(
           registeredFood.map((singleFood) => {
             return { ...singleFood.food };
@@ -43,9 +42,7 @@ export default function AddFoodPage() {
   }, []);
 
   const searchFunction = (value: string) => {
-    console.log(value);
     const foundItem = storedFood.find((item) => item.id === value);
-    console.log(foundItem);
     if (foundItem) {
       setInitialValues({
         name: foundItem.name,
@@ -90,7 +87,6 @@ export default function AddFoodPage() {
       enableReinitialize
       initialValues={initialValues}
       onSubmit={(values, helpers) => {
-        console.log(values);
         FoodService()
           .registerFood({
             name: values.name,
@@ -102,7 +98,6 @@ export default function AddFoodPage() {
             },
           })
           .then((registeredFood) => {
-            console.log(registeredFood)
             FoodService()
               .addConsumedFood({
                 registeredFood: registeredFood,

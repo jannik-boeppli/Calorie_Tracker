@@ -19,7 +19,6 @@ export default function LandingPage() {
     FoodService()
       .getConsumedFoodToday()
       .then((value) =>{
-        console.log(value)
         setFoodToDisplay(
           value.map(
             ({ registeredFood, amount }: { registeredFood: RegisteredFood, amount: number }) => {return {...registeredFood.food, amount: amount}}
@@ -29,7 +28,6 @@ export default function LandingPage() {
       GoalService()
       .getUserGoal()
       .then((data) => {
-        console.log(data);
         setGoals({ ...data.goal });
       });
   }, []);

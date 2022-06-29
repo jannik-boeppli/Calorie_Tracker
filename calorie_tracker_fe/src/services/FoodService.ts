@@ -14,7 +14,6 @@ const FoodService = () => ({
     return data;
 },
   addConsumedFood: async (consumedfood: ConsumedFood) => {
-    console.log(consumedfood)
     const {data} = await ApiService.post(baseURL + "/", {registeredFood: consumedfood.registeredFood, amount: consumedfood.amount});
     return data;
 },
@@ -23,7 +22,6 @@ const FoodService = () => ({
   return data;
 }, 
   registerFood: async (food: Food) => {
-    console.log({food: {name: food.name, nutrition: food.nutrition}})
     const {data} = await ApiService.post("/registeredfood", {food: {name: food.name, nutrition: food.nutrition}});
     return data;
 }, 

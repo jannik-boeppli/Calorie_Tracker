@@ -24,7 +24,6 @@ export default function NutritionGoalsPage() {
     GoalService()
       .getUserGoal()
       .then((data) => {
-        console.log(data);
         setUserGoal({ ...data.goal });
       });
   }, []);
