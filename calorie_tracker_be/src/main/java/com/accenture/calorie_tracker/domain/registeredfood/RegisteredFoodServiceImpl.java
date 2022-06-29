@@ -1,5 +1,6 @@
 package com.accenture.calorie_tracker.domain.registeredfood;
 
+import com.accenture.calorie_tracker.core.error.NotFoundException;
 import com.accenture.calorie_tracker.core.generic.AbstractEntityServiceImpl;
 import com.accenture.calorie_tracker.domain.food.Food;
 import com.accenture.calorie_tracker.domain.food.FoodService;
@@ -10,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RegisteredFoodServiceImpl extends AbstractEntityServiceImpl<RegisteredFood> implements RegisteredFoodService {
@@ -33,10 +35,26 @@ public class RegisteredFoodServiceImpl extends AbstractEntityServiceImpl<Registe
         else food = foodService.findByValue(newEntity.getFood());
 
         if (food == null) food = foodService.save(newEntity.getFood());
-
         newEntity.setFood(food);
 
-        return newEntity;
+        RegisteredFood existingFood = findByValue(newEntity);
+        return existingFood != null ? existingFood : newEntity;
+    }
+
+    @Override
+    public List<RegisteredFood> findAll() {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return super.findAll().stream()
+                .filter(registeredFood ->
+                        registeredFood.getUser().getId().equals(currentUser.getId())).collect(Collectors.toList());
+    }
+
+    @Override
+    public RegisteredFood findById(String id) throws NotFoundException {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        RegisteredFood registeredFood = super.findById(id);
+
+        return registeredFood.getUser().getId().equals(currentUser.getId()) ? registeredFood : null;
     }
 
     @Override

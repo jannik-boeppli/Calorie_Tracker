@@ -6,7 +6,6 @@ import {
   Col,
   Card,
   Space,
-  Input as AntInput,
   message,
 } from "antd";
 import { Formik } from "formik";
@@ -35,11 +34,12 @@ export default function ProfilePage() {
   useEffect(() => {
     UserService()
       .getCurrentUser()
-      .then((value) =>
+      .then((value) =>{
         setUser({
           ...value,
+          weightInKg: value.bodyMass && value.bodyMass.weightInKg !== 0 ? value.bodyMass.weightInKg : "",
           heightInCM: value.heightInCM === 0 ? "" : value.heightInCM,
-        })
+        })}
       );
   }, []);
 
@@ -71,7 +71,6 @@ export default function ProfilePage() {
       initialValues={user}
       validationSchema={validationSchema}
       onSubmit={(values, helpers) => {
-        console.log("values",values)
         UserService()
           .updateUser({
             ...values,
@@ -79,7 +78,6 @@ export default function ProfilePage() {
             heightInCM: +values.heightInCM,
           })
           .then(() => message.success("Profile successfully updated"))
-          .catch((error) => console.log(error));
 
         helpers.setSubmitting(false);
         //TODO: Submit data to backend
@@ -174,7 +172,7 @@ export default function ProfilePage() {
                     BMI
                   </Title>
                   <SaveButton
-                    onClick={() => {console.log("submitting"); submitForm()}}
+                    onClick={() => submitForm()}
                     loading={isSubmitting}
                     disabled={isSubmitting}
                   />

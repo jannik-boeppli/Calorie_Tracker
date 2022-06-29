@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface UserGoalRepository extends AbstractEntityRepository<UserGoal> {
+    UserGoal findByUserAndEndTimeIsNull(User user);
     List<UserGoal> findAllByUser(User user);
 }

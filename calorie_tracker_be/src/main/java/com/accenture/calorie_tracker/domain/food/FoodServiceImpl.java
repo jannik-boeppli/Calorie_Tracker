@@ -37,7 +37,14 @@ public class FoodServiceImpl extends AbstractEntityServiceImpl<Food> implements 
 
     @Override
     public Food findByValue(Food food) {
+        Nutrition nutrition = food.getNutrition();
+        if (nutrition.getId() != null) nutrition = nutritionService.findById(nutrition.getId().toString());
+        else nutrition = nutritionService.findByValue(food.getNutrition());
+
+        if (nutrition == null) nutrition = nutritionService.save(food.getNutrition());
+
+
         return ((FoodRepository) repository).findByNameAndNutrition(
-                food.getName(), nutritionService.findByValue(food.getNutrition()));
+                food.getName(), nutritionService.findByValue(nutrition));
     }
 }

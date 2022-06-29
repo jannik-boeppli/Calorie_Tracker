@@ -1,5 +1,5 @@
-import { Card, Typography } from "antd";
-import React, { useState } from "react";
+import { Card, Empty, Typography } from "antd";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import Food from "../../../models/Food";
 import useWindowDimensions from "../../../utils/WindowDimensions";
@@ -8,57 +8,39 @@ import LineDivider from "../../atoms/LineDivider/LineDivider";
 import ConsumedFoodCard from "../../molecules/ConsumedFoodCard/ConsumedFoodCard";
 import "./ConsumedFoodDashboard.css";
 
-export default function ConsumedFoodDashboard() {
+interface PropsType {
+  food: Food[]
+}
+
+export default function ConsumedFoodDashboard({food}: PropsType) {
   const { Title } = Typography;
-  const {width, height} = useWindowDimensions()
-  const isMobile = width < 1050
-  const navigation = useNavigate()
-  const [foodToDisplay, setFoodToDisplay] = useState<Food[]>([
-    {
-      amount: 250,
-      name: "Spaghetti Bolognese",
-      calories: 1600,
-      protein: 40,
-      fat: 28,
-      carbs: 53,
-    },
-    {
-      amount: 250,
-      name: "Spaghetti Bolognese",
-      calories: 1600,
-      protein: 40,
-      fat: 28,
-      carbs: 53,
-    },
-    {
-      amount: 250,
-      name: "Spaghetti Bolognese",
-      calories: 1600,
-      protein: 40,
-      fat: 28,
-      carbs: 53,
-    },
-    {
-      amount: 250,
-      name: "Spaghetti Bolognese",
-      calories: 1600,
-      protein: 40,
-      fat: 28,
-      carbs: 53,
-    },
-    {
-      amount: 250,
-      name: "Spaghetti Bolognese",
-      calories: 1600,
-      protein: 40,
-      fat: 28,
-      carbs: 53,
-    },
-  ]);
+  const { width, height } = useWindowDimensions();
+  const isMobile = width < 1050;
+  const navigation = useNavigate();
+  
+
+  const renderCards = () => {
+    if (food.length === 0) {
+      return <Empty imageStyle={{width: "100%", height: "100%", margin: "auto"}} description={<Title style={{color: "#389e0d"}} underline onClick={() => navigation("/food")} level={5}>No entries yet, create one!</Title>}/>
+    }
+    return (food.map((singleFood) => (
+      <ConsumedFoodCard
+        amount={singleFood.amount}
+        name={singleFood.name}
+        nutrition={singleFood.nutrition}
+      />)
+    ))
+  }
 
   return (
     <Card
-    style={isMobile ? {} : height < 1050 ? {marginTop: "2em"} : {marginTop: "4em"}}
+      style={
+        isMobile
+          ? {}
+          : height < 1050
+          ? { marginTop: "2em" }
+          : { marginTop: "4em" }
+      }
       bodyStyle={{ height: "100%" }}
       className="consumed-food-dashboard-card"
     >
@@ -70,16 +52,7 @@ export default function ConsumedFoodDashboard() {
           <LineDivider />
         </div>
         <div style={{ flex: "1", overflow: "auto" }}>
-          {foodToDisplay.map((food) => (
-            <ConsumedFoodCard
-            amount={food.amount}
-            name={food.name}
-            calories={food.calories}
-            protein={food.protein}
-            fat={food.fat}
-            carbs={food.carbs}
-          />
-          ))}
+          {renderCards()}
         </div>
         <div>
           <LineDivider />

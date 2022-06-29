@@ -6,10 +6,7 @@ import com.accenture.calorie_tracker.core.generic.DTOMapper;
 import com.accenture.calorie_tracker.domain.user.dto.UserDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -38,7 +35,7 @@ public class UserController extends AbstractEntityController<User, UserDTO> {
 
     @PutMapping("/")
     @Override
-    public ResponseEntity<UserDTO> updateById(String ignore, UserDTO dto) {
+    public ResponseEntity<UserDTO> updateById(String ignore,@RequestBody UserDTO dto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return super.updateById(user.getId().toString(), dto);
     }

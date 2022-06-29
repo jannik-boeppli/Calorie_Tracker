@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class ConsumedFoodDTO extends AbstractEntityDTO {
     private LocalDateTime timeOfConsumption;
     private RegisteredFood registeredFood;
+    private int amount;
 
     public LocalDateTime getTimeOfConsumption() {
         return timeOfConsumption;
@@ -15,6 +16,15 @@ public class ConsumedFoodDTO extends AbstractEntityDTO {
 
     public ConsumedFoodDTO setTimeOfConsumption(LocalDateTime timeOfConsumption) {
         this.timeOfConsumption = timeOfConsumption;
+        return this;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public ConsumedFoodDTO setAmount(int amount) {
+        this.amount = amount;
         return this;
     }
 

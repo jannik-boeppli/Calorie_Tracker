@@ -32,7 +32,6 @@ export default function LoginPage() {
       initialValues={{ username: "", password: "" }}
       validationSchema={validationSchema}
       onSubmit={(values, helpers) => {
-        console.log(values);
         login(values.username, values.password).then(() => navigate("/"))
         helpers.setSubmitting(false);
       }}

@@ -1,7 +1,8 @@
 import Nutrition from "./Nutrition";
 
-export default interface Food extends Nutrition {
+export default interface Food {
     id?: string,
-    amount: number,
+    amount?: number,
     name: string,
+    nutrition: Nutrition
 }

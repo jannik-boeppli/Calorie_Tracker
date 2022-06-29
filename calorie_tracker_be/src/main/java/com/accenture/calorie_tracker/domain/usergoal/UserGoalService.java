@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface UserGoalService extends AbstractEntityService<UserGoal> {
     List<UserGoal> findAllByUser(User user);
+    UserGoal getOpenGoal();
 }

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,18 +40,22 @@ public class ConsumedFoodServiceImpl extends AbstractEntityServiceImpl<ConsumedF
 
         newEntity.setRegisteredFood(registeredFood);
 
+        if (newEntity.getTimeOfConsumption() == null) newEntity.setTimeOfConsumption(LocalDateTime.now());
         return newEntity;
     }
+
 
     @Override
     public Collection<ConsumedFood> findAllFromDate() {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<ConsumedFood> consumedFoodsByDate =
-                ((ConsumedFoodRepository) repository).findAllByTimeOfConsumption(LocalDateTime.now());
+        List<ConsumedFood> consumedFoodsByDate = repository.findAll().stream().filter(consumedFood ->
+                consumedFood.getTimeOfConsumption().getDayOfYear() == LocalDateTime.now().getDayOfYear() &&
+                        consumedFood.getTimeOfConsumption().getYear() == LocalDateTime.now().getYear()
+        ).collect(Collectors.toList());
 
         return consumedFoodsByDate.stream()
-                .filter(consumedFood -> consumedFood.getRegisteredFood().getUser().getId()
-                        .equals(currentUser.getId())).collect(Collectors.toList());
+                .filter(consumedFood -> consumedFood.getRegisteredFood().getUser().getId().equals(currentUser.getId()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -63,13 +66,17 @@ public class ConsumedFoodServiceImpl extends AbstractEntityServiceImpl<ConsumedF
                 .filter(consumedFood1 -> consumedFood1.getRegisteredFood().getUser().getId().equals(currentUser.getId()))
                 .collect(Collectors.toList());
 
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         List<ConsumedFoodByDateDTO> history = new ArrayList<>();
         for (ConsumedFood food : consumedFood) {
-            ConsumedFoodByDateDTO listElement = history.stream().filter(consumedFoodByDateDTO -> fmt.format(consumedFoodByDateDTO.getLocalDateTime()).equals(fmt.format(food.getTimeOfConsumption()))).findFirst().orElse(null);
+            ConsumedFoodByDateDTO listElement = history.stream().filter(consumedFoodByDateDTO ->
+                    consumedFoodByDateDTO.getLocalDateTime().getDayOfYear() == food.getTimeOfConsumption().getDayOfYear() &&
+                            consumedFoodByDateDTO.getLocalDateTime().getYear() == food.getTimeOfConsumption().getYear())
+                    .findFirst().orElse(null);
             if (listElement == null) {
                 listElement = new ConsumedFoodByDateDTO();
+                listElement.setLocalDateTime(food.getTimeOfConsumption());
                 listElement.setNutrition(food.getRegisteredFood().getFood().getNutrition());
+                listElement.setAmount(food.getAmount());
                 history.add(listElement);
             } else {
                 listElement.getNutrition().setProtein(listElement.getNutrition().getProtein() +
@@ -80,6 +87,7 @@ public class ConsumedFoodServiceImpl extends AbstractEntityServiceImpl<ConsumedF
                         food.getRegisteredFood().getFood().getNutrition().getCarbs());
                 listElement.getNutrition().setCalories(listElement.getNutrition().getCalories() +
                         food.getRegisteredFood().getFood().getNutrition().getCalories());
+                listElement.setAmount(listElement.getAmount() + food.getAmount());
             }
         }
 

@@ -16,9 +16,9 @@ public class NutritionServiceImpl extends AbstractEntityServiceImpl<Nutrition> i
     @Override
     public Nutrition findByValue(Nutrition nutrition) {
         return ((NutritionRepository) repository).findByCaloriesAndCarbsAndFatAndProtein(
-                Math.min(0, nutrition.getCalories()),
-                Math.min(0, nutrition.getCarbs()),
-                Math.min(0, nutrition.getFat()),
-                Math.min(0, nutrition.getProtein()));
+                nutrition.getCalories(),
+                nutrition.getCarbs(),
+                nutrition.getFat(),
+                nutrition.getProtein());
     }
 }
