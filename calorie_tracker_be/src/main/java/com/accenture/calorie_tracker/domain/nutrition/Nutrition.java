@@ -29,6 +29,14 @@ public class Nutrition extends AbstractEntity {
         this.protein = protein;
     }
 
+    public Nutrition(Nutrition nutrition) {
+        this.calories = nutrition.getCalories();
+        this.carbs = nutrition.getCarbs();
+        this.fat = nutrition.getFat();
+        this.protein = nutrition.getProtein();
+    }
+
+
     public Nutrition() {
     }
 

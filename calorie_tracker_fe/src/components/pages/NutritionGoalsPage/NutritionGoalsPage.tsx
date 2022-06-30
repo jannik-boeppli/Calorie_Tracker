@@ -92,8 +92,7 @@ export default function NutritionGoalsPage() {
           bodyMass: {
             weightInKg: +values.weightInKg
           }
-        }).then(() => message.success("Updated goal"));
-        helpers.setSubmitting(false);
+        }).then(() =>{ message.success("Updated goal"); helpers.setSubmitting(false);});
       }}
     >
       {({ submitForm, isSubmitting, errors, values, handleChange }) => (
@@ -178,6 +177,7 @@ export default function NutritionGoalsPage() {
                   onClick={() => submitForm()}
                   loading={isSubmitting}
                   disabled={isSubmitting}
+                  htmlType="submit"
                 />
               </Col>
               <Col span={1} />

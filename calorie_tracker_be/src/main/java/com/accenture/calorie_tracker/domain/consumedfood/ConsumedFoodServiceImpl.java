@@ -2,6 +2,7 @@ package com.accenture.calorie_tracker.domain.consumedfood;
 
 import com.accenture.calorie_tracker.core.generic.AbstractEntityServiceImpl;
 import com.accenture.calorie_tracker.domain.consumedfood.dto.ConsumedFoodByDateDTO;
+import com.accenture.calorie_tracker.domain.nutrition.Nutrition;
 import com.accenture.calorie_tracker.domain.registeredfood.RegisteredFood;
 import com.accenture.calorie_tracker.domain.registeredfood.RegisteredFoodService;
 import com.accenture.calorie_tracker.domain.user.User;
@@ -75,7 +76,7 @@ public class ConsumedFoodServiceImpl extends AbstractEntityServiceImpl<ConsumedF
             if (listElement == null) {
                 listElement = new ConsumedFoodByDateDTO();
                 listElement.setLocalDateTime(food.getTimeOfConsumption());
-                listElement.setNutrition(food.getRegisteredFood().getFood().getNutrition());
+                listElement.setNutrition(new Nutrition(food.getRegisteredFood().getFood().getNutrition()));
                 listElement.setAmount(food.getAmount());
                 history.add(listElement);
             } else {

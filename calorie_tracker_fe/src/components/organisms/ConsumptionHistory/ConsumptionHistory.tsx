@@ -23,6 +23,7 @@ export default function ConsumptionHistory() {
     FoodService()
       .getConsumedFoodHistory()
       .then((data) => {
+        console.log(data)
         setDaysToDisplay(
           data.map((day: { localDateTime: Date; nutrition: Nutrition }) => {
             return { ...day.nutrition, date: new Date(day.localDateTime) };
@@ -30,6 +31,10 @@ export default function ConsumptionHistory() {
         );
       });
   }, []);
+  useEffect(() => {
+    console.log(daysToDisplay)
+  }, [daysToDisplay])
+  
 
   return (
     <Card
