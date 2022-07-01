@@ -199,6 +199,7 @@ export default function AddFoodPage() {
                   }}
                   loading={isSubmitting}
                   disabled={isSubmitting}
+                  htmlType="submit"
                 />
               </Col>
             </Row>

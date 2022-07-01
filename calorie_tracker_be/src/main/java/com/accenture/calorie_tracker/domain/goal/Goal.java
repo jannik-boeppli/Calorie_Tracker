@@ -15,11 +15,11 @@ import java.util.UUID;
 public class Goal extends AbstractEntity {
 
     @ManyToOne
-    @JoinColumn(name = "nutrition_id")
+    @JoinColumn(name = "nutrition_id", nullable = false)
     private Nutrition nutrition;
 
     @ManyToOne
-    @JoinColumn(name = "body_mass_id")
+    @JoinColumn(name = "body_mass_id", nullable = false)
     private BodyMass bodyMass;
 
     public Goal(Nutrition nutrition, BodyMass bodyMass) {

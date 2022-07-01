@@ -72,7 +72,6 @@ export const AuthenticationContextProvider = ({
     return AuthenticationService()
       .login(username, password)
       .then((data) => extractAndSetPrincipalAndTokens(data))
-      .catch((error_message) => message.error(error_message.response.data));
   };
 
   const logout = async () => {

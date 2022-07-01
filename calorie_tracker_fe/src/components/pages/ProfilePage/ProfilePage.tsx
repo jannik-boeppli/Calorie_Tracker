@@ -1,13 +1,5 @@
 import { UserOutlined } from "@ant-design/icons";
-import {
-  Typography,
-  Form,
-  Row,
-  Col,
-  Card,
-  Space,
-  message,
-} from "antd";
+import { Typography, Form, Row, Col, Card, Space, message } from "antd";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 
@@ -34,13 +26,16 @@ export default function ProfilePage() {
   useEffect(() => {
     UserService()
       .getCurrentUser()
-      .then((value) =>{
+      .then((value) => {
         setUser({
           ...value,
-          weightInKg: value.bodyMass && value.bodyMass.weightInKg !== 0 ? value.bodyMass.weightInKg : "",
+          weightInKg:
+            value.bodyMass && value.bodyMass.weightInKg !== 0
+              ? value.bodyMass.weightInKg
+              : "",
           heightInCM: value.heightInCM === 0 ? "" : value.heightInCM,
-        })}
-      );
+        });
+      });
   }, []);
 
   const validationSchema = Yup.object({
@@ -75,25 +70,26 @@ export default function ProfilePage() {
       initialValues={user}
       validationSchema={validationSchema}
       onSubmit={(values, helpers) => {
-        console.log(values)
+        console.log(values);
         UserService()
           .updateUser({
             ...values,
             bodyMass: { weightInKg: +values.weightInKg },
             heightInCM: +values.heightInCM,
           })
-          .then(() => message.success("Profile successfully updated"))
-          .catch((error) =>
-          {console.log(error); message.error(error.response.data)}
-         );
-
-        helpers.setSubmitting(false);
+          .then(() => {
+            message.success("Profile successfully updated");
+            helpers.setSubmitting(false);
+          })
+          .catch((error) => {
+            message.error(error.response.data);
+            helpers.setSubmitting(false);
+          });
       }}
     >
       {({ isSubmitting, submitForm, handleChange, values, errors }) => (
         <Form>
           <Row className={width < 1050 ? "adjusted-half" : "profile-top-half"}>
-            
             <Col span={24} className="center">
               <UserOutlined style={{ fontSize: "30vmin", color: "#389e0d" }} />
             </Col>
@@ -182,6 +178,7 @@ export default function ProfilePage() {
                     onClick={() => submitForm()}
                     loading={isSubmitting}
                     disabled={isSubmitting}
+                    htmlType="submit"
                   />
                 </Space>
               </Card>

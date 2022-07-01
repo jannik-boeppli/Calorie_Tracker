@@ -22,7 +22,7 @@ import { useAuth } from "../../../contexts/AuthenticationContext";
 export default function SignUpPage() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const { Text } = Typography;
-  const {login} = useAuth()
+  const { login } = useAuth();
   const navigation = useNavigate();
   const validationSchema = Yup.object({
     firstName: Yup.string()
@@ -59,17 +59,15 @@ export default function SignUpPage() {
         AuthenticationService()
           .signup({ ...values })
           .then(() => {
-            login(values.username, values.password)
-              .then(() => {
-                navigation("/");
-                helpers.setSubmitting(false);
-              });
+            login(values.username, values.password).then(() => {
+              navigation("/");
+              helpers.setSubmitting(false);
+            });
           })
-          .catch((error) =>
-           {console.log(error); message.error(error.response.data)}
-          );
-        helpers.setSubmitting(false);
-        //TODO: Submit data to backend
+          .catch((error) => {
+            message.error(error.response.data);
+            helpers.setSubmitting(false);
+          });
       }}
     >
       {({ isSubmitting, submitForm, handleChange, values, errors }) => (
@@ -160,6 +158,7 @@ export default function SignUpPage() {
                     disabled={isSubmitting}
                     type="primary"
                     size="large"
+                    htmlType="submit"
                   >
                     Sign Up
                   </Button>

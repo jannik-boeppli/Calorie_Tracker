@@ -1,5 +1,14 @@
 import { LoginOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Row, Input as AntInput, Space, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Row,
+  Input as AntInput,
+  Space,
+  Typography,
+  message,
+} from "antd";
 import Link from "antd/lib/typography/Link";
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
@@ -24,7 +33,7 @@ export default function LoginPage() {
       .max(255, "The password can't be longer than 255 characters"),
   });
 
-  const {login} = useAuth();
+  const { login } = useAuth();
 
   return (
     <Formik
@@ -32,8 +41,10 @@ export default function LoginPage() {
       initialValues={{ username: "", password: "" }}
       validationSchema={validationSchema}
       onSubmit={(values, helpers) => {
-        login(values.username, values.password).then(() => navigate("/"))
-        helpers.setSubmitting(false);
+        login(values.username, values.password).then(() => {
+          navigate("/");
+          helpers.setSubmitting(false);
+        }).catch((error_message) => {message.error(error_message.response.data); helpers.setSubmitting(false);});
       }}
     >
       {({ isSubmitting, submitForm, handleChange, values, errors }) => (
@@ -86,11 +97,15 @@ export default function LoginPage() {
                   >
                     <Button
                       className="login-button"
-                      onClick={() => {setHasSubmitted(true);submitForm()}}
+                      onClick={() => {
+                        setHasSubmitted(true);
+                        submitForm();
+                      }}
                       loading={isSubmitting}
                       disabled={isSubmitting}
                       type="primary"
                       size="large"
+                      htmlType="submit"
                     >
                       Login
                     </Button>
