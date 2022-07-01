@@ -10,16 +10,16 @@ import java.util.UUID;
 @Entity
 @Table(name = "nutrition")
 public class Nutrition extends AbstractEntity {
-    @Column(name = "calories")
+    @Column(name = "calories", nullable = false)
     private int calories;
 
-    @Column(name = "carbs")
+    @Column(name = "carbs", nullable = false)
     private int carbs;
 
-    @Column(name = "fat")
+    @Column(name = "fat", nullable = false)
     private int fat;
 
-    @Column(name = "protein")
+    @Column(name = "protein", nullable = false)
     private int protein;
 
     public Nutrition(int calories, int carbs, int fat, int protein) {
