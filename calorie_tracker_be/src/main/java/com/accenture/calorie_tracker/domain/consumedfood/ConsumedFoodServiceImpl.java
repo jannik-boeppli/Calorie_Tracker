@@ -29,6 +29,13 @@ public class ConsumedFoodServiceImpl extends AbstractEntityServiceImpl<ConsumedF
         this.registeredFoodService = registeredFoodService;
     }
 
+    /**
+     * This method checks if an entry with the same values already exists to prevent duplicates,
+     * also it sets the time of consumption if not already set
+     *
+     * @param newEntity is the object, that will be saved
+     * @return if an entry was found it returns the found entry or else the object from the parameter
+     */
     @Override
     protected ConsumedFood preSave(ConsumedFood newEntity) {
         RegisteredFood registeredFood = newEntity.getRegisteredFood();
@@ -45,7 +52,11 @@ public class ConsumedFoodServiceImpl extends AbstractEntityServiceImpl<ConsumedF
         return newEntity;
     }
 
-
+    /**
+     * This method searches for every consumed food from the current day from the logged in user
+     *
+     * @return is a collection of the consumed food from the current day from the logged in user
+     */
     @Override
     public Collection<ConsumedFood> findAllFromDate() {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -59,6 +70,11 @@ public class ConsumedFoodServiceImpl extends AbstractEntityServiceImpl<ConsumedF
                 .collect(Collectors.toList());
     }
 
+    /**
+     * This method searches for every consumed food from the current user and summarizes them by the date
+     *
+     * @return is a collection of summarization from the logged in users consumed food by date
+     */
     @Override
     public Collection<ConsumedFoodByDateDTO> findAllFromUser() {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

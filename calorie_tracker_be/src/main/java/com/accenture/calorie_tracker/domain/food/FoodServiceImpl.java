@@ -19,6 +19,12 @@ public class FoodServiceImpl extends AbstractEntityServiceImpl<Food> implements 
         this.nutritionService = nutritionService;
     }
 
+    /**
+     * This method checks if an entry with the same values already exists to prevent duplicates
+     *
+     * @param newEntity is the object, that will be saved
+     * @return if an entry was found it returns the found entry or else the object from the parameter
+     */
     @Override
     protected Food preSave(Food newEntity) {
         Nutrition nutrition = null;
@@ -35,6 +41,12 @@ public class FoodServiceImpl extends AbstractEntityServiceImpl<Food> implements 
         return newEntity;
     }
 
+    /**
+     * This method searches for an entry with the same value as the entered object
+     *
+     * @param food the object to be searched for
+     * @return is the object that was found or null
+     */
     @Override
     public Food findByValue(Food food) {
         Nutrition nutrition = food.getNutrition();

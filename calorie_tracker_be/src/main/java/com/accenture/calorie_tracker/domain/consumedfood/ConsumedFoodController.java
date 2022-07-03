@@ -20,6 +20,11 @@ public class ConsumedFoodController extends AbstractEntityController<ConsumedFoo
         super(service, mapper);
     }
 
+    /**
+     * This endpoint searches every consumed food at the current date from the logged in user
+     *
+     * @return is a collection of all the consumed food from the current day
+     */
     @GetMapping("/now")
     public ResponseEntity<Collection<ConsumedFoodDTO>> findAllNow() {
         Collection<ConsumedFood> dms = ((ConsumedFoodService) service).findAllFromDate();
@@ -27,6 +32,11 @@ public class ConsumedFoodController extends AbstractEntityController<ConsumedFoo
         return new ResponseEntity<>(mapper.toDTOs(dms), HttpStatus.OK);
     }
 
+    /**
+     * This endpoint summarizes every consumed food by date
+     *
+     * @return is a collection of the summary of the consumed food by date
+     */
     @GetMapping("/")
     public ResponseEntity<Collection<ConsumedFoodByDateDTO>> findAllFromUser() {
         Collection<ConsumedFoodByDateDTO> dms = ((ConsumedFoodService) service).findAllFromUser();

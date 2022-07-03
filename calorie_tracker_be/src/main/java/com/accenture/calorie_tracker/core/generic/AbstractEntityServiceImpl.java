@@ -24,6 +24,9 @@ public abstract class AbstractEntityServiceImpl<T extends AbstractEntity> implem
         initClassName();
     }
 
+    /**
+     * This method gets the class from the class that extends this class
+     */
     private void initClassName() {
         try {
             this.className = Class.forName(((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0].getTypeName()).getSimpleName();
@@ -32,11 +35,23 @@ public abstract class AbstractEntityServiceImpl<T extends AbstractEntity> implem
         }
     }
 
+    /**
+     * This method returns all entries from the extended class
+     *
+     * @return a list of objects
+     */
     @Override
     public List<T> findAll() {
         return repository.findAll();
     }
 
+    /**
+     * This method returns the object with the id from the parameter
+     *
+     * @param id the id to be searched for
+     * @return the found object
+     * @throws NotFoundException will be thrown if the object could not be found
+     */
     @Override
     public T findById(String id) throws NotFoundException {
         logger.debug("Attempting to find " + className + " with ID '" + id + "'");
@@ -51,6 +66,12 @@ public abstract class AbstractEntityServiceImpl<T extends AbstractEntity> implem
         }
     }
 
+    /**
+     * This method creates a new entry from the object
+     *
+     * @param entity the object to be created
+     * @return the created object
+     */
     @Override
     public T create(T entity) {
         logger.debug("Attempting to create " + className);
@@ -62,6 +83,12 @@ public abstract class AbstractEntityServiceImpl<T extends AbstractEntity> implem
         return entity;
     }
 
+    /**
+     * This method saves the object
+     *
+     * @param entity is the object to be saved
+     * @return the saved object
+     */
     @Override
     public T save(T entity) {
         logger.debug("Attempting to save " + className);
@@ -72,6 +99,15 @@ public abstract class AbstractEntityServiceImpl<T extends AbstractEntity> implem
         return entity;
     }
 
+    /**
+     * This method updates the entry by the id with the new object
+     *
+     * @param id     the entry to be updated
+     * @param entity the object with the new data
+     * @return the updated object
+     * @throws NotFoundException              will be thrown if the entry could not be found
+     * @throws UsernameAlreadyExistsException will be thrown if the username is changed and is already taken
+     */
     @Override
     public T updateById(String id, T entity) throws NotFoundException, UsernameAlreadyExistsException {
         logger.debug("Attempting to update " + className + " with ID '" + id + "'");
@@ -91,6 +127,12 @@ public abstract class AbstractEntityServiceImpl<T extends AbstractEntity> implem
         }
     }
 
+    /**
+     * This method return a list of all the fields which are null
+     *
+     * @param source the object to be checked
+     * @return list of strings of the fields that are null
+     */
     public static String[] getNullPropertyNames(Object source) {
         final BeanWrapper src = new BeanWrapperImpl(source);
         PropertyDescriptor[] pds = src.getPropertyDescriptors();
@@ -107,10 +149,22 @@ public abstract class AbstractEntityServiceImpl<T extends AbstractEntity> implem
         return emptyNames.toArray(result);
     }
 
+    /**
+     * This method is meant to be overridden for a custom method before the object will be saved
+     *
+     * @param newEntity the object to be saved
+     * @return the object to be saved
+     */
     protected T preSave(T newEntity) {
         return newEntity;
     }
 
+    /**
+     * This method deletes the entry by the id
+     *
+     * @param id the id of the entry to be deleted
+     * @throws NotFoundException will be thrown if the entry could not be found
+     */
     @Override
     public void deleteById(String id) throws NotFoundException {
         logger.debug("Attempting to delete " + className + " with ID '" + id + "'");
@@ -118,6 +172,12 @@ public abstract class AbstractEntityServiceImpl<T extends AbstractEntity> implem
         logger.debug("Deleted " + className + " with ID '" + id + "'");
     }
 
+    /**
+     * This method checks if the entry with the id exists
+     *
+     * @param id the id to be checked
+     * @return returns true if the element exists else false
+     */
     @Override
     public boolean existsById(String id) {
         return repository.existsById(UUID.fromString(id));
