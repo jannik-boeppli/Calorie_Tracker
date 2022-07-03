@@ -24,6 +24,12 @@ public class GoalServiceImpl extends AbstractEntityServiceImpl<Goal> implements 
         this.bodyMassService = bodyMassService;
     }
 
+    /**
+     * This method checks if an entry with the same values already exists to prevent duplicates
+     *
+     * @param newEntity is the object, that will be saved
+     * @return if an entry was found it returns the found entry or else the object from the parameter
+     */
     @Override
     protected Goal preSave(Goal newEntity) {
         if (newEntity.getNutrition() != null) {
@@ -46,11 +52,17 @@ public class GoalServiceImpl extends AbstractEntityServiceImpl<Goal> implements 
         return newEntity;
     }
 
+    /**
+     * This method tries to find an entry with the same values
+     *
+     * @param goal the object to be searched for
+     * @return is the found entry or null
+     */
     @Override
     public Goal findByValue(Goal goal) {
         BodyMass bodyMass = goal.getBodyMass();
-        if (bodyMass != null){
-            if(bodyMass.getId() != null) bodyMass = bodyMassService.findById(bodyMass.getId().toString());
+        if (bodyMass != null) {
+            if (bodyMass.getId() != null) bodyMass = bodyMassService.findById(bodyMass.getId().toString());
             else bodyMass = bodyMassService.findByValue(goal.getBodyMass().getWeightInKg());
 
             if (bodyMass == null) bodyMass = bodyMassService.save(goal.getBodyMass());
@@ -58,10 +70,10 @@ public class GoalServiceImpl extends AbstractEntityServiceImpl<Goal> implements 
 
         Nutrition nutrition = goal.getNutrition();
         if (nutrition != null) {
-            if(nutrition.getId() != null) nutrition = nutritionService.findById(nutrition.getId().toString());
+            if (nutrition.getId() != null) nutrition = nutritionService.findById(nutrition.getId().toString());
             else nutrition = nutritionService.findByValue(goal.getNutrition());
 
-            if(nutrition == null) nutrition = nutritionService.save(goal.getNutrition());
+            if (nutrition == null) nutrition = nutritionService.save(goal.getNutrition());
         }
 
         return ((GoalRepository) repository).findByBodyMassAndNutrition(bodyMass, nutrition);
