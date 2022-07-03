@@ -13,6 +13,12 @@ public class NutritionServiceImpl extends AbstractEntityServiceImpl<Nutrition> i
         super(repository, logger);
     }
 
+    /**
+     * This method searches for an entry with the same value
+     *
+     * @param nutrition the object to be searched for
+     * @return is ether the found object or null
+     */
     @Override
     public Nutrition findByValue(Nutrition nutrition) {
         return ((NutritionRepository) repository).findByCaloriesAndCarbsAndFatAndProtein(

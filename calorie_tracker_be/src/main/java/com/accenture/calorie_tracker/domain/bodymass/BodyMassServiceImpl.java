@@ -15,7 +15,12 @@ public class BodyMassServiceImpl extends AbstractEntityServiceImpl<BodyMass> imp
         this.newRepository = newRepository;
     }
 
-
+    /**
+     * This method searches for an entry with the same value as the parameter
+     *
+     * @param value is the weight in kg
+     * @return returns a body mass object if an entry was found else null
+     */
     @Override
     public BodyMass findByValue(float value) {
         return newRepository.findByWeightInKg(value);

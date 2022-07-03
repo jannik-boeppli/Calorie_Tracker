@@ -17,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 @Service
 public class UserServiceImpl extends AbstractEntityServiceImpl<User> implements UserService, UserDetailsService {
@@ -34,6 +33,12 @@ public class UserServiceImpl extends AbstractEntityServiceImpl<User> implements 
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * This method checks if the the body mass with the same value exists to prevent duplicates
+     *
+     * @param entity is the object, that will be saved
+     * @return is the user after searching for existing values
+     */
     @Override
     public User preSave(User entity) {
         if (entity.getBodyMass() != null) {
@@ -47,12 +52,27 @@ public class UserServiceImpl extends AbstractEntityServiceImpl<User> implements 
         return entity;
     }
 
+    /**
+     * This method encodes the password of the user before calling the super create method
+     *
+     * @param entity the user to be created
+     * @return the created user
+     */
     @Override
     public User create(User entity) {
         entity.setPassword(passwordEncoder.encode(entity.getPassword()));
         return super.create(entity);
     }
 
+    /**
+     * This method updates the logged in user
+     *
+     * @param id     will be ignored
+     * @param entity is the user with the updated data
+     * @return the new updated user
+     * @throws NotFoundException              will be thrown if the user could not be found
+     * @throws UsernameAlreadyExistsException will be thrown if the username is already taken
+     */
     @Override
     public User updateById(String id, User entity) throws NotFoundException, UsernameAlreadyExistsException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -69,6 +89,13 @@ public class UserServiceImpl extends AbstractEntityServiceImpl<User> implements 
         }
     }
 
+    /**
+     * This method tries to find the user by the username
+     *
+     * @param username the name to be searched for
+     * @return ether null or the user security object
+     * @throws UsernameNotFoundException will be thrown if the user could not be found
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = newRepository.findByUsername(username);
@@ -77,6 +104,12 @@ public class UserServiceImpl extends AbstractEntityServiceImpl<User> implements 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
     }
 
+    /**
+     * This method searches for the user by its username
+     *
+     * @param username the name to be searched for
+     * @return the user that was found or null
+     */
     public User findByUsername(String username) {
         return ((UserRepository) repository).findByUsername(username);
     }
